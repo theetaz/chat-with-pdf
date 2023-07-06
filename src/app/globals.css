@@ -21,7 +21,7 @@ body {
 
 @media screen and (min-width: 1200px) {
   .buttonCol {
-    padding: 0 15rem;
+    padding: 0 5rem;
   }
   .uploader-container {
     padding: 0 50px;

@@ -11,16 +11,12 @@ import React from "react";
 
 const HeroPage = () => {
   return (
-    <div
-      style={{
-        height: "100vh",
-      }}
-    >
+    <>
       <div
         className="container text-center "
         style={{
-          paddingTop: "100px",
-          height: "90vh",
+          paddingTop: "50px",
+          maxWidth: "924px",
         }}
       >
         <div className="row px-lg-5 px-0">
@@ -123,10 +119,10 @@ const HeroPage = () => {
       <div
         style={{
           marginTop: "16px",
+          marginBottom: "16px",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "10vh",
         }}
       >
         <Link
@@ -180,7 +176,7 @@ const HeroPage = () => {
           Twitter
         </Link>
       </div>
-    </div>
+    </>
   );
 };
 
