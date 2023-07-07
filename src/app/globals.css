@@ -41,3 +41,6 @@ body {
   border-radius: 8px;
 }
 
+.buttonCol .ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
+  border: 1px solid #4096ff !important;
+}
