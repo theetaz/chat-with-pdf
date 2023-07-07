@@ -1,6 +1,8 @@
 "use client";
 
+import ChatHistoryCard from "@/components/ChatHistoryCard";
 import DetailsCard from "@/components/DetailsCard";
+import Footer from "@/components/Footer";
 import Uploader from "@/components/Uploader";
 import IconDiscord from "@/icons/IconDiscord";
 import IconFacebook from "@/icons/IconFacebook";
@@ -72,6 +74,13 @@ const HeroPage = () => {
         <div className="container mt-5 uploader-container ">
           <Uploader />
         </div>
+
+        {/* chat history container */}
+        <div className="container mt-4">
+          <ChatHistoryCard />
+        </div>
+
+        {/* details cards */}
         <div
           className="container "
           style={{
@@ -116,6 +125,7 @@ const HeroPage = () => {
         </div>
       </div>
 
+      {/* footer links */}
       <div
         style={{
           marginTop: "16px",
@@ -125,56 +135,7 @@ const HeroPage = () => {
           alignItems: "center",
         }}
       >
-        <Link
-          href="/about"
-          style={{
-            marginRight: "10px",
-            textDecoration: "none",
-            color: "#8496aa",
-          }}
-        >
-          About
-        </Link>
-        <Link
-          href="/about"
-          style={{
-            marginRight: "10px",
-            textDecoration: "none",
-            color: "#8496aa",
-          }}
-        >
-          Pricing
-        </Link>
-        <Link
-          href="/about"
-          style={{
-            marginRight: "10px",
-            textDecoration: "none",
-            color: "#8496aa",
-          }}
-        >
-          FAQ
-        </Link>
-        <Link
-          href="/about"
-          style={{
-            marginRight: "10px",
-            textDecoration: "none",
-            color: "#8496aa",
-          }}
-        >
-          Affiliate
-        </Link>
-        <Link
-          href="/about"
-          style={{
-            marginRight: "10px",
-            textDecoration: "none",
-            color: "#8496aa",
-          }}
-        >
-          Twitter
-        </Link>
+        <Footer />
       </div>
     </>
   );

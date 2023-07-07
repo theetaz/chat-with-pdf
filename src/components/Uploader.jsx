@@ -6,6 +6,7 @@ const props = {
   name: "file",
   multiple: false,
   action: "",
+  accept: ".pdf",
   onChange(info) {
     const { status } = info.file;
     if (status !== "uploading") {
