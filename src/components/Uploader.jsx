@@ -1,6 +1,6 @@
 "use client";
 
-import { InboxOutlined } from "@ant-design/icons";
+
 import { message, Upload } from "antd";
 const { Dragger } = Upload;
 
