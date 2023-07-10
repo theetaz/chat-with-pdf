@@ -1,3 +1,5 @@
+"use client";
+
 import { InboxOutlined } from "@ant-design/icons";
 import { message, Upload } from "antd";
 const { Dragger } = Upload;
@@ -25,9 +27,7 @@ const props = {
 
 const Uploader = () => (
   <Dragger {...props} className="uploader">
-    <p className="ant-upload-drag-icon">
-      + New Chat
-    </p>
+    <p className="ant-upload-drag-icon">+ New Chat</p>
     <p className="ant-upload-text">Click or drag PDF file</p>
   </Dragger>
 );

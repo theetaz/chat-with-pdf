@@ -1,5 +1,7 @@
 "use client";
 
+import ChatComp from "@/components/ChatComp";
+import PdfViewer from "@/components/PdfViewer";
 import SiderMenu from "@/components/SiderMenu";
 import SiderUploader from "@/components/SiderUploader";
 
@@ -18,6 +20,7 @@ export default function Page() {
         width: "100vw",
       }}
     >
+      {/* sider  */}
       <div
         className="sider"
         style={{
@@ -146,7 +149,67 @@ export default function Page() {
           </div>
         </div>
       </div>
-      
+
+      {/* pdf viewer */}
+
+      <div
+        style={{
+          flex: "42.237",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+            backgroundColor: "#ffffff",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "13px",
+              alignItems: "center",
+              display: "flex",
+              padding: "0px 8px 0px 6px",
+              height: "42px",
+            }}
+          >
+            <h1
+              style={{
+                fontSize: "16px",
+                marginRight: "auto",
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                paddingLeft: "6px",
+                marginBottom: "0px",
+              }}
+            >
+              Payment E-Receipt.pdf
+            </h1>
+          </div>
+          <div>
+            <PdfViewer />
+          </div>
+        </div>
+      </div>
+      <div
+        style={{
+          backgroundColor: "rgb(238, 238 ,238 )",
+          width: "4px",
+          height: "100%",
+        }}
+      />
+      {/* chats */}
+      <div
+        style={{
+          flex: "33.5068 1 0px",
+          overflow: "hidden",
+        }}
+      >
+        <ChatComp />
+      </div>
     </div>
   );
 }

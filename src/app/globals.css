@@ -48,3 +48,13 @@ body {
 .sider-uploader .ant-upload-wrapper .ant-upload-drag .ant-upload {
   padding: 16px 8px !important;
 }
+
+.chatBubble.user {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.chatBubble.ai {
+  display: flex;
+  justify-content: flex-start;
+}
