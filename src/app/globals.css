@@ -44,3 +44,7 @@ body {
 .buttonCol .ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
   border: 1px solid #4096ff !important;
 }
+
+.sider-uploader .ant-upload-wrapper .ant-upload-drag .ant-upload {
+  padding: 16px 8px !important;
+}
