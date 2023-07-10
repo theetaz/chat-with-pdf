@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@bundled-es-modules/pdfjs-dist": "^3.6.172-alpha.1",
     "@mikecousins/react-pdf": "^5.5.1",
     "antd": "^5.6.4",
     "bootstrap": "^5.3.0",

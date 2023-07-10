@@ -1,6 +1,7 @@
 "use client";
 
 import { usePdf } from "@mikecousins/react-pdf";
+import { Button } from "antd";
 
 import React, { useState, useRef } from "react";
 
@@ -33,17 +34,17 @@ const pdfViewer = () => {
                 paddingLeft: "0px",
               }}
             >
-              <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+              <Button disabled={page === 1} onClick={() => setPage(page - 1)}>
                 Previous
-              </button>
+              </Button>
             </ul>
             <ul className="next">
-              <button
+              <Button
                 disabled={page === pdfDocument.numPages}
                 onClick={() => setPage(page + 1)}
               >
                 Next
-              </button>
+              </Button>
             </ul>
           </ul>
         </nav>

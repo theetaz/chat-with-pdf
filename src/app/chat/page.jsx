@@ -173,6 +173,7 @@ export default function Page() {
               display: "flex",
               padding: "0px 8px 0px 6px",
               height: "42px",
+              borderBottom: "2px solid rgb(238, 238 ,238 )",
             }}
           >
             <h1
@@ -198,7 +199,7 @@ export default function Page() {
         style={{
           backgroundColor: "rgb(238, 238 ,238 )",
           width: "4px",
-          height: "100%",
+          height: "100vh",
         }}
       />
       {/* chats */}
@@ -206,6 +207,7 @@ export default function Page() {
         style={{
           flex: "33.5068 1 0px",
           overflow: "hidden",
+          backgroundColor: "#e8e8e8",
         }}
       >
         <ChatComp />

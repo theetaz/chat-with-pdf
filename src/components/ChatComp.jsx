@@ -4,11 +4,31 @@ import React from "react";
 const ChatComp = () => {
   const data = [
     {
+      msg: "Bubble is a visual programming language, a no-code development platform and an application platform as a service, developed by Bubble Group, that enables non-technical people to build web applications without needing to type code.",
+      sender: "ai",
+    },
+    {
       msg: "Hello",
       sender: "user",
     },
     {
-      msg: "Hello there",
+      msg: "Bubble is a visual programming language, a no-code development platform and an application platform as a service, developed by Bubble Group, that enables non-technical people to build web applications without needing to type code.",
+      sender: "ai",
+    },
+    {
+      msg: "Bubble is a visual programming language, a no-code development platform and an application platform as a service, developed by Bubble Group, that enables non-technical people to build web applications without needing to type code.",
+      sender: "ai",
+    },
+    {
+      msg: "Bubble is a visual programming language, a no-code development platform and an application platform as a service, developed by Bubble Group, that enables non-technical people to build web applications without needing to type code.",
+      sender: "ai",
+    },
+    {
+      msg: "Bubble is a visual programming language, a no-code development platform and an application platform as a service, developed by Bubble Group, that enables non-technical people to build web applications without needing to type code.",
+      sender: "ai",
+    },
+    {
+      msg: "Bubble is a visual programming language, a no-code development platform and an application platform as a service, developed by Bubble Group, that enables non-technical people to build web applications without needing to type code.",
       sender: "ai",
     },
   ];
@@ -20,7 +40,7 @@ const ChatComp = () => {
         flexDirection: "column",
         flexGrow: "1",
         maxWidth: "100%",
-        height: "100%",
+        height: "100vh",
       }}
     >
       <div
@@ -31,6 +51,7 @@ const ChatComp = () => {
           display: "flex",
           alignItems: "center",
           flexShrink: "0",
+          borderBottom: "1px solid #e8e8e8",
         }}
       >
         <h1
@@ -59,14 +80,16 @@ const ChatComp = () => {
           style={{
             width: "100%",
             maxWidth: "768px",
+            overflow: "auto",
           }}
         >
           <List
             loading={false}
             dataSource={data}
+            split={false}
             renderItem={(item, index) => (
               <List.Item key={index} className={`chatBubble ${item.sender}`}>
-                {item?.msg}
+                <div className="chatMessage">{item?.msg}</div>
               </List.Item>
             )}
             style={{
@@ -98,7 +121,14 @@ const ChatComp = () => {
           }}
         >
           <Input defaultValue="Combine input and button" />
-          <Button type="primary">Submit</Button>
+          <Button
+            type="primary"
+            style={{
+              marginLeft: "3px",
+            }}
+          >
+            Send
+          </Button>
         </Space.Compact>
       </div>
     </div>
