@@ -4,14 +4,17 @@ import ChatHistoryCard from "@/components/ChatHistoryCard";
 import DetailsCard from "@/components/DetailsCard";
 import Footer from "@/components/Footer";
 import Uploader from "@/components/Uploader";
+import { setTest } from "@/feature/dataslice";
 import IconDiscord from "@/icons/IconDiscord";
 import IconFacebook from "@/icons/IconFacebook";
 import IconTwitterSquare from "@/icons/IconTwitterSquare";
 import { Button } from "antd";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 
 const HeroPage = () => {
+  const dispatch = useDispatch();
   useEffect(() => {
     let userId = "";
 
@@ -59,6 +62,7 @@ const HeroPage = () => {
                     border: "1px solid #bccadf",
                   }}
                   icon={<IconDiscord />}
+                  onClick={() => dispatch(setTest("test"))}
                 >
                   Join Discord
                 </Button>

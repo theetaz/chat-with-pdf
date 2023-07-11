@@ -10,7 +10,9 @@ import { FacebookFilled, TwitterOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import Link from "next/link";
 
-export default function Page() {
+export default function Page({ params }) {
+  let id = params.id;
+
   return (
     <div
       style={{
@@ -211,7 +213,7 @@ export default function Page() {
           backgroundColor: "#e8e8e8",
         }}
       >
-        <ChatComp />
+        <ChatComp id={id} />
       </div>
     </div>
   );

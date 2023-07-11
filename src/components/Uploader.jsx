@@ -1,13 +1,16 @@
 "use client";
 
+import { setSummary } from "@/feature/dataslice";
 import { message, Upload } from "antd";
 import { useRouter } from "next/navigation";
 const { Dragger } = Upload;
 
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 const Uploader = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [uploadedFile, setUploadedFile] = useState(null);
 
   const props = {
@@ -36,6 +39,7 @@ const Uploader = () => {
   useEffect(() => {
     //route to chat page id
     if (uploadedFile) {
+      dispatch(setSummary(uploadedFile.summary));
       router.push(`/chat/${uploadedFile.id}`);
     }
   }, [uploadedFile]);

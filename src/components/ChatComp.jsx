@@ -1,58 +1,60 @@
 "use client";
-import { Button, Input, List, Space } from "antd";
-import { useEffect, useState } from "react";
+import { Button, Form, Input, List, Space } from "antd";
+import { use, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
-const ChatComp = () => {
+const ChatComp = ({ id }) => {
   const [userMessage, setUserMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const handleUserMessage = (e) => {
-    setUserMessage(e.target.value);
-  };
+  //testing
+  let documentId = id;
+  useEffect(() => {
+    console.log("documentId :", documentId);
+  }, [documentId]);
 
   //send user typed message to backend
 
-  const sendUserMessage = () => {
+  const sendUserMessage = async () => {
     //check if user message is empty by removing white spaces
     if (userMessage.replace(/\s/g, "").length === 0) {
       return;
     }
     console.log("backend :", userMessage);
+    setMessages((messages) => [
+      ...messages,
+      { msg: userMessage, sender: "user" },
+    ]);
+    setUserMessage("");
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `http://localhost:8000/api/v1/chatdoc/chat?id=${documentId}&query=${userMessage}`
+      );
+      const data = await response.json();
+      console.log(data.result.reply);
+      setMessages((messages) => [
+        ...messages,
+        { msg: data.result.reply, sender: "ai" },
+      ]);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     console.log(userMessage);
   }, [userMessage]);
 
-  const data = [
-    {
-      msg: "Bubble is a visual programming language, a no-code development platform and an application platform as a service, developed by Bubble Group, that enables non-technical people to build web applications without needing to type code.",
-      sender: "ai",
-    },
-    {
-      msg: "Hello",
-      sender: "user",
-    },
-    {
-      msg: "Bubble is a visual programming language, a no-code development platform and an application platform as a service, developed by Bubble Group, that enables non-technical people to build web applications without needing to type code.",
-      sender: "ai",
-    },
-    {
-      msg: "Bubble is a visual programming language, a no-code development platform and an application platform as a service, developed by Bubble Group, that enables non-technical people to build web applications without needing to type code.",
-      sender: "user",
-    },
-    {
-      msg: "Bubble is a visual programming language, a no-code development platform and an application platform as a service, developed by Bubble Group, that enables non-technical people to build web applications without needing to type code.",
-      sender: "ai",
-    },
-    {
-      msg: "Bubble is a visual programming language, a no-code development platform and an application platform as a service, developed by Bubble Group, that enables non-technical people to build web applications without needing to type code.",
-      sender: "user",
-    },
-    {
-      msg: "Bubble is a visual programming language, a no-code development platform and an application platform as a service, developed by Bubble Group, that enables non-technical people to build web applications without needing to type code.",
-      sender: "ai",
-    },
-  ];
+  //getting summary from redux store
+  const summary = useSelector((state) => state.data.setSummary);
+  useEffect(() => {
+    setMessages([{ msg: summary, sender: "ai" }]);
+  }, [summary]);
+
   return (
     <div
       style={{
@@ -106,7 +108,7 @@ const ChatComp = () => {
         >
           <List
             loading={false}
-            dataSource={data}
+            dataSource={messages}
             split={false}
             renderItem={(item, index) => (
               <List.Item key={index} className={`chatBubble ${item.sender}`}>
@@ -118,6 +120,7 @@ const ChatComp = () => {
               padding: "0px 12px",
               justifySelf: "center",
               overflow: "auto",
+              fontSize: "14px",
             }}
           />
         </div>
@@ -129,29 +132,41 @@ const ChatComp = () => {
           justifyContent: "center",
         }}
       >
-        <Space.Compact
+        <Form
+          onFinish={sendUserMessage}
           style={{
             width: "100%",
-            margin: "12px 0px 16px",
-            padding: "0px 12px",
-            maxWidth: "768px",
-            display: "flex",
-            flexShrink: "0",
-            flexGrow: "1",
-            alignSelf: "center",
           }}
         >
-          <Input placeholder="Ask questions" onChange={handleUserMessage} />
-          <Button
-            type="primary"
+          <Space.Compact
             style={{
-              marginLeft: "3px",
+              width: "100%",
+              margin: "12px 0px 16px",
+              padding: "0px 12px",
+              maxWidth: "768px",
+              display: "flex",
+              flexShrink: "0",
+              flexGrow: "1",
+              alignSelf: "center",
             }}
-            onClick={sendUserMessage}
           >
-            Send
-          </Button>
-        </Space.Compact>
+            <Input
+              placeholder="Ask questions"
+              value={userMessage}
+              onChange={(e) => setUserMessage(e.target.value)}
+            />
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{
+                marginLeft: "3px",
+              }}
+              loading={loading}
+            >
+              Send
+            </Button>
+          </Space.Compact>
+        </Form>
       </div>
     </div>
   );
