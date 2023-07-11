@@ -1,9 +1,9 @@
 "use client";
 
 export default function OtherPdfView() {
-    
-  const viewerUrl =
-    "https://www.africau.edu/images/default/sample.pdf#page=1&zoom=80&toolbar=0";
+  const url = "https://www.africau.edu/images/default/sample.pdf";
+
+  const viewerUrl = `${url}#page=1&zoom=80&toolbar=0`;
   return (
     <div
       style={{
