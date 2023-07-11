@@ -8,8 +8,29 @@ import IconDiscord from "@/icons/IconDiscord";
 import IconFacebook from "@/icons/IconFacebook";
 import IconTwitterSquare from "@/icons/IconTwitterSquare";
 import { Button } from "antd";
+import { useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const HeroPage = () => {
+  useEffect(() => {
+    let userId = "";
+
+    if (typeof window !== "undefined") {
+      // Check if the unique ID exists in local storage
+      if (localStorage.getItem("userId")) {
+        // If it exists, retrieve the unique ID
+        userId = localStorage.getItem("userId");
+        console.log("userId :", userId);
+      } else {
+        // If it doesn't exist, generate a new unique ID
+        userId = uuidv4();
+        // Store the unique ID in local storage
+        localStorage.setItem("userId", userId);
+        console.log("userId :", userId);
+      }
+    }
+  }, []);
+
   return (
     <>
       <div

@@ -1,7 +1,28 @@
 "use client";
 import { Button, Input, List, Space } from "antd";
+import { useEffect, useState } from "react";
 
 const ChatComp = () => {
+  const [userMessage, setUserMessage] = useState("");
+
+  const handleUserMessage = (e) => {
+    setUserMessage(e.target.value);
+  };
+
+  //send user typed message to backend
+
+  const sendUserMessage = () => {
+    //check if user message is empty by removing white spaces
+    if (userMessage.replace(/\s/g, "").length === 0) {
+      return;
+    }
+    console.log("backend :", userMessage);
+  };
+
+  useEffect(() => {
+    console.log(userMessage);
+  }, [userMessage]);
+
   const data = [
     {
       msg: "Bubble is a visual programming language, a no-code development platform and an application platform as a service, developed by Bubble Group, that enables non-technical people to build web applications without needing to type code.",
@@ -120,12 +141,13 @@ const ChatComp = () => {
             alignSelf: "center",
           }}
         >
-          <Input defaultValue="Combine input and button" />
+          <Input placeholder="Ask questions" onChange={handleUserMessage} />
           <Button
             type="primary"
             style={{
               marginLeft: "3px",
             }}
+            onClick={sendUserMessage}
           >
             Send
           </Button>
