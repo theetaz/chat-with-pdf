@@ -8,8 +8,6 @@ import IconDiscord from "@/icons/IconDiscord";
 import IconFacebook from "@/icons/IconFacebook";
 import IconTwitterSquare from "@/icons/IconTwitterSquare";
 import { Button } from "antd";
-import Link from "next/link";
-import React from "react";
 
 const HeroPage = () => {
   return (

@@ -1,4 +1,5 @@
-import { Card, Space } from "antd";
+"use client";
+import { Card } from "antd";
 const ChatHistoryCard = () => (
   <Card
     title="My Chats"

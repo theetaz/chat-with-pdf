@@ -1,7 +1,8 @@
 "use client";
 
 import ChatComp from "@/components/ChatComp";
-import PdfViewer from "@/components/PdfViewer";
+import OtherPdfView from "@/components/OtherPdfView";
+
 import SiderMenu from "@/components/SiderMenu";
 import SiderUploader from "@/components/SiderUploader";
 
@@ -191,7 +192,7 @@ export default function Page() {
             </h1>
           </div>
           <div>
-            <PdfViewer />
+            <OtherPdfView />
           </div>
         </div>
       </div>

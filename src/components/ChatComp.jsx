@@ -1,5 +1,5 @@
+"use client";
 import { Button, Input, List, Space } from "antd";
-import React from "react";
 
 const ChatComp = () => {
   const data = [
@@ -17,7 +17,7 @@ const ChatComp = () => {
     },
     {
       msg: "Bubble is a visual programming language, a no-code development platform and an application platform as a service, developed by Bubble Group, that enables non-technical people to build web applications without needing to type code.",
-      sender: "ai",
+      sender: "user",
     },
     {
       msg: "Bubble is a visual programming language, a no-code development platform and an application platform as a service, developed by Bubble Group, that enables non-technical people to build web applications without needing to type code.",
@@ -25,7 +25,7 @@ const ChatComp = () => {
     },
     {
       msg: "Bubble is a visual programming language, a no-code development platform and an application platform as a service, developed by Bubble Group, that enables non-technical people to build web applications without needing to type code.",
-      sender: "ai",
+      sender: "user",
     },
     {
       msg: "Bubble is a visual programming language, a no-code development platform and an application platform as a service, developed by Bubble Group, that enables non-technical people to build web applications without needing to type code.",
