@@ -120,6 +120,7 @@ const ChatComp = ({ id }) => {
               padding: "0px 12px",
               justifySelf: "center",
               overflow: "auto",
+              fontSize: "14px",
             }}
           />
         </div>
