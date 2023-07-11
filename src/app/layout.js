@@ -1,6 +1,10 @@
+"use client";
+
 import Head from "next/head";
 import "./globals.css";
 import "bootstrap/dist/css/bootstrap.css";
+import { Provider } from "react-redux";
+import store from "@/redux/store";
 
 export const metadata = {
   title: "Chat with PDF",
@@ -13,7 +17,9 @@ export default function RootLayout({ children }) {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <body>{children}</body>
+      <body>
+        <Provider store={store}>{children}</Provider>
+      </body>
     </html>
   );
 }
