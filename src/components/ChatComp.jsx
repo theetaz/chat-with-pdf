@@ -1,12 +1,13 @@
 "use client";
 import { Button, Form, Input, List, Space } from "antd";
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 const ChatComp = ({ id }) => {
   const [userMessage, setUserMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const messageEndRef = useRef(null);
 
   //testing
   let documentId = id;
@@ -54,6 +55,11 @@ const ChatComp = ({ id }) => {
   useEffect(() => {
     setMessages([{ msg: summary, sender: "ai" }]);
   }, [summary]);
+
+  //scroll to bottom
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   return (
     <div
@@ -123,6 +129,7 @@ const ChatComp = ({ id }) => {
               fontSize: "14px",
             }}
           />
+          <div ref={messageEndRef} />
         </div>
       </div>
 
