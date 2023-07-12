@@ -1,6 +1,7 @@
 "use client";
+
 import { Button, Form, Input, List, Space } from "antd";
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 const ChatComp = ({ id }) => {
@@ -14,6 +15,15 @@ const ChatComp = ({ id }) => {
   useEffect(() => {
     console.log("documentId :", documentId);
   }, [documentId]);
+
+  //getting summary from redux store
+  const summary = useSelector((state) => state.data.setSummary);
+
+  useEffect(() => {
+    if (summary) {
+      setMessages([{ msg: summary, sender: "ai" }]);
+    }
+  }, [summary]);
 
   //send user typed message to backend
 
@@ -31,7 +41,7 @@ const ChatComp = ({ id }) => {
     try {
       setLoading(true);
       const response = await fetch(
-        `http://localhost:8000/api/v1/chatdoc/chat?id=${documentId}&query=${userMessage}`
+        `http://localhost:8000/api/v1/chatdoc/chat?source_id=${documentId}&query=${userMessage}`
       );
       const data = await response.json();
       console.log(data.result.reply);
@@ -46,19 +56,31 @@ const ChatComp = ({ id }) => {
     }
   };
 
-  useEffect(() => {
-    console.log(userMessage);
-  }, [userMessage]);
-
-  //getting summary from redux store
-  const summary = useSelector((state) => state.data.setSummary);
-  useEffect(() => {
-    setMessages([{ msg: summary, sender: "ai" }]);
-  }, [summary]);
-
   //scroll to bottom
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  //check if the message is empty and message history is there
+  async function getChatHistory(documentId) {
+    if (messages.length === 0) {
+      try {
+        const response = await fetch(
+          `http://localhost:8000/api/v1/chatdoc/chat_history?source_id=${documentId}`
+        );
+        const data = await response.json();
+        console.log("kusal :", data.result.chat_history);
+        setMessages(data.result.chat_history);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (messages.length === 0) {
+      getChatHistory(documentId);
+    }
   }, [messages]);
 
   return (

@@ -1,7 +1,8 @@
 "use client";
 
 export default function OtherPdfView() {
-  const url = "https://www.africau.edu/images/default/sample.pdf";
+  const url =
+    "https://scholar.harvard.edu/files/david-morin/files/waves_quantum.pdf";
 
   const viewerUrl = `${url}#page=1&zoom=80&toolbar=0`;
   return (

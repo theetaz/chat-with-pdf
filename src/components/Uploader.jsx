@@ -12,12 +12,31 @@ const Uploader = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [uploadedFile, setUploadedFile] = useState(null);
+  const [userId, setUserId] = useState(null);
+
+  //get user id from local storage
+  useEffect(() => {
+    let userId = "";
+
+    if (typeof window !== "undefined") {
+      // Check if the unique ID exists in local storage
+      if (localStorage.getItem("userId")) {
+        // If it exists, retrieve the unique ID
+        userId = localStorage.getItem("userId");
+        console.log("userId :", userId);
+        setUserId(userId);
+      }
+    }
+  }, []);
 
   const props = {
     name: "file",
     multiple: false,
     action: "http://localhost:8000/api/v1/chatdoc/",
     accept: ".pdf",
+    data: {
+      userid: userId?.toString(),
+    },
     onChange(info) {
       const { status } = info.file;
       if (status !== "uploading") {
@@ -40,7 +59,7 @@ const Uploader = () => {
     //route to chat page id
     if (uploadedFile) {
       dispatch(setSummary(uploadedFile.summary));
-      router.push(`/chat/${uploadedFile.id}`);
+      router.push(`/chat/${uploadedFile.source_id}`);
     }
   }, [uploadedFile]);
 
