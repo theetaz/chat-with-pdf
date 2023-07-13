@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Loader from "./Loader";
 
 export default function OtherPdfView({ id }) {
   let sourceId = id;
 
   const [urlPdf, setUrlPdf] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   //testing
   useEffect(() => {
@@ -14,6 +16,7 @@ export default function OtherPdfView({ id }) {
 
   //get pdf url from local storage
   useEffect(() => {
+    setLoading(true);
     let pdfUrl = "";
 
     if (typeof window !== "undefined") {
@@ -23,6 +26,7 @@ export default function OtherPdfView({ id }) {
         pdfUrl = localStorage.getItem(`${sourceId}`);
         setUrlPdf(pdfUrl);
         console.log("pdfUrl from LS :", pdfUrl);
+        setLoading(false);
       }
     }
   }, [sourceId]);
@@ -31,14 +35,20 @@ export default function OtherPdfView({ id }) {
 
   const viewerUrl = `${url}#page=1&zoom=80&toolbar=0`;
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "94vh",
-        backgroundColor: "#ffffff !important",
-      }}
-    >
-      <iframe src={viewerUrl} width="100%" height="100%" frameBorder="0" />
-    </div>
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div
+          style={{
+            width: "100%",
+            height: "94vh",
+            backgroundColor: "#ffffff !important",
+          }}
+        >
+          <iframe src={viewerUrl} width="100%" height="100%" frameBorder="0" />
+        </div>
+      )}
+    </>
   );
 }

@@ -5,6 +5,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   setSummary: "",
   setTest: "",
+  
 };
 
 export const dataSlice = createSlice({
@@ -17,10 +18,11 @@ export const dataSlice = createSlice({
     setTest: (state, action) => {
       state.setTest = action.payload;
     },
+    
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setSummary, setTest } = dataSlice.actions;
+export const { setSummary, setTest, } = dataSlice.actions;
 
 export default dataSlice.reducer;

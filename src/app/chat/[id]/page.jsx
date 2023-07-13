@@ -9,9 +9,26 @@ import SiderUploader from "@/components/SiderUploader";
 import { FacebookFilled, TwitterOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Page({ params }) {
   let id = params.id;
+  const [pdfFileName, setPdfFileName] = useState(null);
+
+  //get pdf name from local storage
+  useEffect(() => {
+    let pdfName = "";
+
+    if (typeof window !== "undefined") {
+      // Check if the unique ID exists in local storage
+      if (localStorage.getItem(`${id}name`)) {
+        // If it exists, retrieve the unique ID
+        pdfName = localStorage.getItem(`${id}name`);
+        console.log("pdfName from LS :", pdfName);
+        setPdfFileName(pdfName);
+      }
+    }
+  }, [id]);
 
   return (
     <div
@@ -190,7 +207,7 @@ export default function Page({ params }) {
                 marginBottom: "0px",
               }}
             >
-              Payment E-Receipt.pdf
+              {pdfFileName}
             </h1>
           </div>
           <div>
@@ -198,6 +215,8 @@ export default function Page({ params }) {
           </div>
         </div>
       </div>
+
+
       <div
         style={{
           backgroundColor: "rgb(238, 238 ,238 )",
