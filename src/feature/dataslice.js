@@ -4,8 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   setSummary: "",
-  setTest: "",
-  
+  setUrlParam: "",
 };
 
 export const dataSlice = createSlice({
@@ -15,14 +14,13 @@ export const dataSlice = createSlice({
     setSummary: (state, action) => {
       state.setSummary = action.payload;
     },
-    setTest: (state, action) => {
-      state.setTest = action.payload;
+    setUrlParam: (state, action) => {
+      state.setUrlParam = action.payload;
     },
-    
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setSummary, setTest, } = dataSlice.actions;
+export const { setSummary, setUrlParam } = dataSlice.actions;
 
 export default dataSlice.reducer;

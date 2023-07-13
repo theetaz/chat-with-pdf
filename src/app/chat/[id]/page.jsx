@@ -2,10 +2,19 @@
 
 import ChatComp from "@/components/ChatComp";
 import OtherPdfView from "@/components/OtherPdfView";
+import { setUrlParam } from "@/feature/dataslice";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 export default function Page({ params }) {
   let id = params.id;
+
+  const dispach = useDispatch();
+
+  useEffect(() => {
+    dispach(setUrlParam(id));
+  }, [id]);
+
   const [pdfFileName, setPdfFileName] = useState(null);
 
   //get pdf name from local storage

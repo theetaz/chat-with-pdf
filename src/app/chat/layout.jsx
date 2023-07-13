@@ -1,28 +1,86 @@
 "use client";
 
-import Head from "next/head";
-import React, { useState } from "react";
-import { Layout, Menu, Button, theme } from "antd";
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from "@ant-design/icons";
-import SiderMenu from "@/components/SiderMenu";
+import { Layout, Button, theme, Menu } from "antd";
+
 import Link from "next/link";
 
-import { FacebookFilled, TwitterOutlined } from "@ant-design/icons";
+import {
+  FacebookFilled,
+  TwitterOutlined,
+  MessageOutlined,
+} from "@ant-design/icons";
 import Uploader from "@/components/Uploader";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 
-const { Header, Sider, Content } = Layout;
+const { Sider, Content } = Layout;
 
 export default function ChatLayout({ children }) {
-  const [collapsed, setCollapsed] = useState(false);
+  const router = useRouter();
+  const [userId, setUserId] = useState(null);
+  const [recentChats, setRecentChats] = useState(null);
+  const [selectedKey, setSelectedKey] = useState(null);
+
+  //get user id from local storage
+  useEffect(() => {
+    let userId = "";
+    if (typeof window !== "undefined") {
+      // Check if the unique ID exists in local storage
+      if (localStorage.getItem("userId")) {
+        // If it exists, retrieve the unique ID
+        userId = localStorage.getItem("userId");
+        setUserId(userId);
+        console.log("userId :", userId);
+      }
+    }
+  }, []);
+
+  //fetch recent chats from backend
+  const fetchRecentChats = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/v1/chatdoc/recent_chat?userid=${userId}`
+      );
+      const data = await response.json();
+      console.log(data.result.recent_chats);
+      setRecentChats(data.result.recent_chats);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (userId) {
+      fetchRecentChats();
+    }
+  }, [userId]);
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const urlParam = useSelector((state) => state.data.setUrlParam);
+
+  useEffect(() => {
+    console.log("selectedKey :", urlParam);
+    setSelectedKey(urlParam);
+  }, [urlParam]);
+
+  const items = recentChats?.map((chat) => {
+    return {
+      key: chat.source_id,
+      icon: <MessageOutlined />,
+      label: chat.source_name,
+      type: "MenuItemType",
+    };
+  });
+
+  const handleClick = (e) => {
+    console.log("click ", e.key);
+    setSelectedKey(e.key);
+    router.push(`/chat/${e.key}`);
+  };
 
   return (
     <Layout
@@ -49,7 +107,16 @@ export default function ChatLayout({ children }) {
         <div className="sider-uploader">
           <Uploader />
         </div>
-        <SiderMenu />
+        <Menu
+          theme={"dark"}
+          onClick={handleClick}
+          style={{
+            width: "full",
+          }}
+          mode="inline"
+          items={items}
+          selectedKeys={selectedKey}
+        />
         <div
           style={{
             marginTop: "auto",
