@@ -34,7 +34,7 @@ const SiderMenu = () => {
         theme={"dark"}
         onClick={onClick}
         style={{
-          width: 256,
+          width: "full",
         }}
         defaultOpenKeys={["sub1"]}
         mode="inline"
