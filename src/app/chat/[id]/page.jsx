@@ -194,7 +194,7 @@ export default function Page({ params }) {
             </h1>
           </div>
           <div>
-            <OtherPdfView />
+            <OtherPdfView id={id} />
           </div>
         </div>
       </div>

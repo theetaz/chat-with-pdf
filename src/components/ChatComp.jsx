@@ -69,8 +69,8 @@ const ChatComp = ({ id }) => {
           `http://localhost:8000/api/v1/chatdoc/chat_history?source_id=${documentId}`
         );
         const data = await response.json();
-        console.log("kusal :", data.result.chat_history);
-        setMessages(data.result.chat_history);
+        console.log("kusal :", data.result?.chat_history);
+        setMessages(data.result?.chat_history);
       } catch (error) {
         console.log(error);
       }
@@ -78,7 +78,7 @@ const ChatComp = ({ id }) => {
   }
 
   useEffect(() => {
-    if (messages.length === 0) {
+    if (messages?.length === 0) {
       getChatHistory(documentId);
     }
   }, [messages]);
