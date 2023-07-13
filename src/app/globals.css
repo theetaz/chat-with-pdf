@@ -76,3 +76,8 @@ body {
   background: #4096ff;
   color: #fff;
 }
+
+.site-layout-background .ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+}
