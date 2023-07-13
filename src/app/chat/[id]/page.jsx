@@ -39,6 +39,7 @@ export default function Page({ params }) {
           flex: "42.237",
           overflow: "hidden",
         }}
+        className="pdf-view-col"
       >
         <div
           style={{

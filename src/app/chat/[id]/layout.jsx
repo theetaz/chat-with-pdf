@@ -14,6 +14,7 @@ import SiderMenu from "@/components/SiderMenu";
 import Link from "next/link";
 
 import { FacebookFilled, TwitterOutlined } from "@ant-design/icons";
+import Uploader from "@/components/Uploader";
 
 const { Header, Sider, Content } = Layout;
 
@@ -24,146 +25,147 @@ export default function ChatLayout({ children }) {
   } = theme.useToken();
 
   return (
-    <html lang="en">
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-      <body>
-        <Layout
+    <Layout
+      style={{
+        minHeight: "100vh",
+      }}
+    >
+      <Sider
+        breakpoint="lg"
+        collapsedWidth="0"
+        onBreakpoint={(broken) => {
+          console.log(broken);
+        }}
+        onCollapse={(collapsed, type) => {
+          console.log(collapsed, type);
+        }}
+        width={300}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+        className="site-layout-background"
+      >
+        <div className="sider-uploader">
+          <Uploader />
+        </div>
+        <SiderMenu />
+        <div
           style={{
-            minHeight: "100vh",
+            marginTop: "auto",
           }}
         >
-          <Sider
-            trigger={null}
-            collapsible
-            collapsed={collapsed}
-            width={300}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-            }}
-            className="site-layout-background"
-          >
-            <SiderMenu />
-            <div
+          <div>
+            <Button
               style={{
-                marginTop: "auto",
+                background: "transparent",
+                color: "white",
+                width: "100%",
               }}
             >
-              <div>
-                <Button
+              Sign in to save your chat history
+            </Button>
+          </div>
+          <div
+            style={{
+              marginTop: "10px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <div
+              style={{
+                padding: "10px",
+              }}
+            >
+              <Link
+                style={{
+                  textDecoration: "none",
+                  marginRight: "8px",
+                  color: "white",
+                }}
+                href="/"
+              >
+                Home
+              </Link>
+              <Link
+                style={{
+                  textDecoration: "none",
+                  marginRight: "8px",
+                  color: "white",
+                }}
+                href="/"
+              >
+                Account
+              </Link>
+              <Link
+                style={{
+                  textDecoration: "none",
+                  marginRight: "8px",
+                  color: "white",
+                }}
+                href="/"
+              >
+                API
+              </Link>
+              <Link
+                style={{
+                  textDecoration: "none",
+                  marginRight: "8px",
+                  color: "white",
+                }}
+                href="/"
+              >
+                FAQ
+              </Link>
+            </div>
+            <div
+              style={{
+                padding: "10px",
+                display: "flex",
+              }}
+            >
+              <div
+                style={{
+                  marginRight: "10px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <TwitterOutlined
                   style={{
-                    background: "transparent",
                     color: "white",
-                    width: "100%",
                   }}
-                >
-                  Sign in to save your chat history
-                </Button>
+                />
               </div>
               <div
                 style={{
-                  marginTop: "10px",
+                  marginRight: "10px",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "space-between",
                 }}
               >
-                <div
+                <FacebookFilled
                   style={{
-                    padding: "10px",
+                    color: "white",
                   }}
-                >
-                  <Link
-                    style={{
-                      textDecoration: "none",
-                      marginRight: "8px",
-                      color: "white",
-                    }}
-                    href="/"
-                  >
-                    Home
-                  </Link>
-                  <Link
-                    style={{
-                      textDecoration: "none",
-                      marginRight: "8px",
-                      color: "white",
-                    }}
-                    href="/"
-                  >
-                    Account
-                  </Link>
-                  <Link
-                    style={{
-                      textDecoration: "none",
-                      marginRight: "8px",
-                      color: "white",
-                    }}
-                    href="/"
-                  >
-                    API
-                  </Link>
-                  <Link
-                    style={{
-                      textDecoration: "none",
-                      marginRight: "8px",
-                      color: "white",
-                    }}
-                    href="/"
-                  >
-                    FAQ
-                  </Link>
-                </div>
-                <div
-                  style={{
-                    padding: "10px",
-                    display: "flex",
-                  }}
-                >
-                  <div
-                    style={{
-                      marginRight: "10px",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <TwitterOutlined
-                      style={{
-                        color: "white",
-                      }}
-                    />
-                  </div>
-                  <div
-                    style={{
-                      marginRight: "10px",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <FacebookFilled
-                      style={{
-                        color: "white",
-                      }}
-                    />
-                  </div>
-                </div>
+                />
               </div>
             </div>
-          </Sider>
-          <Layout>
-            <Content
-              style={{
-                minHeight: 280,
-                background: colorBgContainer,
-              }}
-            >
-              {children}
-            </Content>
-          </Layout>
-        </Layout>
-      </body>
-    </html>
+          </div>
+        </div>
+      </Sider>
+      <Layout>
+        <Content
+          style={{
+            minHeight: 280,
+            background: colorBgContainer,
+          }}
+        >
+          {children}
+        </Content>
+      </Layout>
+    </Layout>
   );
 }

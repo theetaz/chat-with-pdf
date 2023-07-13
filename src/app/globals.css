@@ -28,6 +28,12 @@ body {
   }
 }
 
+@media screen and (max-width: 600px) {
+  .pdf-view-col {
+    display: none;
+  }
+}
+
 .uploader .ant-upload-drag {
   border: 1px dashed #bccadf;
 }
@@ -80,4 +86,12 @@ body {
 .site-layout-background .ant-layout-sider-children {
   display: flex;
   flex-direction: column;
+}
+
+.sider-uploader {
+  padding: 20px;
+}
+
+.sider-uploader .ant-upload-drag-icon {
+  margin-bottom: 0px !important;
 }

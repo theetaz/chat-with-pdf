@@ -1,6 +1,6 @@
 "use client";
 
-import { setFileName, setSummary } from "@/feature/dataslice";
+import {  setSummary } from "@/feature/dataslice";
 import { message, Upload } from "antd";
 import { useRouter } from "next/navigation";
 const { Dragger } = Upload;

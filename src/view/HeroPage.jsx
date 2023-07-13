@@ -9,12 +9,15 @@ import IconDiscord from "@/icons/IconDiscord";
 import IconFacebook from "@/icons/IconFacebook";
 import IconTwitterSquare from "@/icons/IconTwitterSquare";
 import { Button } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 
 const HeroPage = () => {
   const dispatch = useDispatch();
+
+  const [userId, setUserId] = useState(null);
+  const [recentChats, setRecentChats] = useState([]);
   useEffect(() => {
     let userId = "";
 
@@ -23,16 +26,39 @@ const HeroPage = () => {
       if (localStorage.getItem("userId")) {
         // If it exists, retrieve the unique ID
         userId = localStorage.getItem("userId");
+        setUserId(userId);
         console.log("userId :", userId);
       } else {
         // If it doesn't exist, generate a new unique ID
         userId = uuidv4();
         // Store the unique ID in local storage
         localStorage.setItem("userId", userId);
+        setUserId(userId);
         console.log("userId :", userId);
       }
     }
   }, []);
+
+  //fetch recent chats from backend
+
+  const fetchRecentChats = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/v1/chatdoc/recent_chat?userid=${userId}`
+      );
+      const data = await response.json();
+      console.log(data.result.recent_chats);
+      setRecentChats(data.result.recent_chats);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (userId) {
+      fetchRecentChats();
+    }
+  }, [userId]);
 
   return (
     <>
@@ -99,9 +125,11 @@ const HeroPage = () => {
         </div>
 
         {/* chat history container */}
-        <div className="container mt-4">
-          <ChatHistoryCard />
-        </div>
+        {recentChats.length > 0 && (
+          <div className="container mt-4">
+            <ChatHistoryCard recentChats={recentChats} />
+          </div>
+        )}
 
         {/* details cards */}
         <div
