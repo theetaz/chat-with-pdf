@@ -54,7 +54,7 @@ export default function ChatLayout({ children }) {
     if (userId) {
       fetchRecentChats();
     }
-  }, [userId]);
+  }, [userId , selectedKey]);
 
   const {
     token: { colorBgContainer },
@@ -122,12 +122,17 @@ export default function ChatLayout({ children }) {
             marginTop: "auto",
           }}
         >
-          <div>
+          <div
+            style={{
+              padding: "10px",
+            }}
+          >
             <Button
               style={{
                 background: "transparent",
                 color: "white",
                 width: "100%",
+                fontSize: "12px",
               }}
             >
               Sign in to save your chat history

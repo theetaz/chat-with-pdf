@@ -47,8 +47,8 @@ const HeroPage = () => {
         `http://localhost:8000/api/v1/chatdoc/recent_chat?userid=${userId}`
       );
       const data = await response.json();
-      console.log(data.result.recent_chats);
-      setRecentChats(data.result.recent_chats);
+      console.log(data.result?.recent_chats);
+      setRecentChats(data.result?.recent_chats);
     } catch (error) {
       console.log(error);
     }
@@ -87,8 +87,8 @@ const HeroPage = () => {
                     background: "transparent",
                     border: "1px solid #bccadf",
                   }}
+                  className="headerButton"
                   icon={<IconDiscord />}
-                  
                 >
                   Join Discord
                 </Button>
@@ -101,6 +101,7 @@ const HeroPage = () => {
                     border: "1px solid #bccadf",
                   }}
                   icon={<IconTwitterSquare />}
+                  className="headerButton"
                 >
                   Post on Twitter
                 </Button>
@@ -113,6 +114,7 @@ const HeroPage = () => {
                     border: "1px solid #bccadf",
                   }}
                   icon={<IconFacebook />}
+                  className="headerButton"
                 >
                   Share on Facebook
                 </Button>
@@ -125,7 +127,7 @@ const HeroPage = () => {
         </div>
 
         {/* chat history container */}
-        {recentChats.length > 0 && (
+        {recentChats?.length > 0 && (
           <div className="container mt-4">
             <ChatHistoryCard recentChats={recentChats} />
           </div>

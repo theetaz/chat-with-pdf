@@ -32,6 +32,10 @@ body {
   .pdf-view-col {
     display: none;
   }
+
+  .headerButton {
+    width: 70% !important;
+  }
 }
 
 .uploader .ant-upload-drag {
@@ -94,4 +98,8 @@ body {
 
 .sider-uploader .ant-upload-drag-icon {
   margin-bottom: 0px !important;
+}
+
+.sider-uploader .ant-upload-list.ant-upload-list-text {
+  display: none !important;
 }

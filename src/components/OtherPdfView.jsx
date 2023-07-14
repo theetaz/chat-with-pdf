@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Loader from "./Loader";
+import { Spin } from "antd";
 
 export default function OtherPdfView({ id }) {
   let sourceId = id;
 
   const [urlPdf, setUrlPdf] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   //testing
   useEffect(() => {
@@ -16,7 +16,6 @@ export default function OtherPdfView({ id }) {
 
   //get pdf url from local storage
   useEffect(() => {
-    setLoading(true);
     let pdfUrl = "";
 
     if (typeof window !== "undefined") {
@@ -37,7 +36,9 @@ export default function OtherPdfView({ id }) {
   return (
     <>
       {loading ? (
-        <Loader />
+        <div>
+          <Spin size="large" />
+        </div>
       ) : (
         <div
           style={{
