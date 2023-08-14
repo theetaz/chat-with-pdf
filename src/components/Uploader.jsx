@@ -36,7 +36,7 @@ const Uploader = () => {
   const props = {
     name: "file",
     multiple: false,
-    action: "http://localhost:8000/api/v1/chatdoc/",
+    action: `${process.env.NEXT_PUBLIC_API_BASS_URL}/api/v1/chatdoc/`,
     headers: {
       ContentType: "application/pdf",
     },

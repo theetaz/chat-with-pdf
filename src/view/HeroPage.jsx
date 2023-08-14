@@ -44,7 +44,7 @@ const HeroPage = () => {
   const fetchRecentChats = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/v1/chatdoc/recent_chat?userid=${userId}`
+        `${process.env.NEXT_PUBLIC_API_BASS_URL}/api/v1/chatdoc/recent_chat?userid=${userId}`
       );
       const data = await response.json();
       console.log(data.result?.recent_chats);
