@@ -135,7 +135,7 @@ const ChatComp = ({ id }) => {
           }}
         >
           <List
-            loading={false}
+            loading={loading}
             dataSource={messages}
             split={false}
             renderItem={(item, index) => (
@@ -191,6 +191,7 @@ const ChatComp = ({ id }) => {
                 marginLeft: "3px",
               }}
               loading={loading}
+              disabled={loading}
             >
               Send
             </Button>

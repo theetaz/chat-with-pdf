@@ -1,11 +1,11 @@
 "use client";
 
 import { setSummary } from "@/feature/dataslice";
-import { message, Upload } from "antd";
+import { message, Spin, Upload } from "antd";
 import { useRouter } from "next/navigation";
 const { Dragger } = Upload;
 
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 const Uploader = () => {
@@ -15,6 +15,8 @@ const Uploader = () => {
   const [userId, setUserId] = useState(null);
   const [pdfLink, setPdfLink] = useState(null);
   const [sourceId, setSourceId] = useState(null);
+  const [pdfName, setPdfName] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   //get user id from local storage
   useEffect(() => {
@@ -29,7 +31,7 @@ const Uploader = () => {
         setUserId(userId);
       }
     }
-  }, []);
+  });
 
   const props = {
     name: "file",
@@ -40,17 +42,22 @@ const Uploader = () => {
     },
     accept: ".pdf",
     data: {
-      userid: userId?.toString(),
+      userid: userId,
     },
     onChange(info) {
       const { status } = info.file;
+      if (status === "uploading") {
+        setLoading(true);
+      }
       if (status !== "uploading") {
         console.log(info.file, info.fileList);
+        setLoading(false);
       }
       if (status === "done") {
         message.success(`${info.file.name} file uploaded successfully.`);
         console.log(info.file.response.result);
         console.log("pdf url :", info.file.response.result.source_url);
+        setPdfName(info.file.name);
         setPdfLink(info.file.response.result.source_url);
         setSourceId(info.file.response.result.source_id);
         setUploadedFile(info.file.response.result);
@@ -73,6 +80,15 @@ const Uploader = () => {
     }
   }, [pdfLink, sourceId]);
 
+  //if pdf name is available, store it in local storage according to the source id
+  useEffect(() => {
+    if (pdfName && sourceId) {
+      if (typeof window !== "undefined") {
+        localStorage.setItem(`${sourceId}name`, pdfName);
+      }
+    }
+  }, [pdfName, sourceId]);
+
   useEffect(() => {
     //route to chat page id
     if (uploadedFile) {
@@ -82,10 +98,13 @@ const Uploader = () => {
   }, [uploadedFile]);
 
   return (
-    <Dragger {...props} className="uploader">
-      <p className="ant-upload-drag-icon">+ New Chat</p>
-      <p className="ant-upload-text">Click or drag PDF file</p>
-    </Dragger>
+    <>
+      <Dragger {...props} className="uploader" >
+        {loading && <Spin size="large" />}
+        <p className="ant-upload-drag-icon">+ New Chat</p>
+        <p className="ant-upload-text">Click or drag PDF file</p>
+      </Dragger>
+    </>
   );
 };
 

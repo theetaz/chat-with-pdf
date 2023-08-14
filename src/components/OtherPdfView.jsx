@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Spin } from "antd";
 
 export default function OtherPdfView({ id }) {
   let sourceId = id;
 
   const [urlPdf, setUrlPdf] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   //testing
   useEffect(() => {
@@ -23,6 +25,7 @@ export default function OtherPdfView({ id }) {
         pdfUrl = localStorage.getItem(`${sourceId}`);
         setUrlPdf(pdfUrl);
         console.log("pdfUrl from LS :", pdfUrl);
+        setLoading(false);
       }
     }
   }, [sourceId]);
@@ -31,14 +34,22 @@ export default function OtherPdfView({ id }) {
 
   const viewerUrl = `${url}#page=1&zoom=80&toolbar=0`;
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "94vh",
-        backgroundColor: "#ffffff !important",
-      }}
-    >
-      <iframe src={viewerUrl} width="100%" height="100%" frameBorder="0" />
-    </div>
+    <>
+      {loading ? (
+        <div>
+          <Spin size="large" />
+        </div>
+      ) : (
+        <div
+          style={{
+            width: "100%",
+            height: "94vh",
+            backgroundColor: "#ffffff !important",
+          }}
+        >
+          <iframe src={viewerUrl} width="100%" height="100%" frameBorder="0" />
+        </div>
+      )}
+    </>
   );
 }

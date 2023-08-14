@@ -28,6 +28,16 @@ body {
   }
 }
 
+@media screen and (max-width: 600px) {
+  .pdf-view-col {
+    display: none;
+  }
+
+  .headerButton {
+    width: 70% !important;
+  }
+}
+
 .uploader .ant-upload-drag {
   border: 1px dashed #bccadf;
 }
@@ -75,4 +85,21 @@ body {
 .chatBubble.user .chatMessage {
   background: #4096ff;
   color: #fff;
+}
+
+.site-layout-background .ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+}
+
+.sider-uploader {
+  padding: 20px;
+}
+
+.sider-uploader .ant-upload-drag-icon {
+  margin-bottom: 0px !important;
+}
+
+.sider-uploader .ant-upload-list.ant-upload-list-text {
+  display: none !important;
 }
