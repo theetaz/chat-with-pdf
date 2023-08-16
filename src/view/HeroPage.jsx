@@ -3,6 +3,7 @@
 import ChatHistoryCard from "@/components/ChatHistoryCard";
 import DetailsCard from "@/components/DetailsCard";
 import Footer from "@/components/Footer";
+import NavBar from "@/components/NavBar";
 import Uploader from "@/components/Uploader";
 
 import IconDiscord from "@/icons/IconDiscord";
@@ -63,6 +64,13 @@ const HeroPage = () => {
   return (
     <>
       <div
+        style={{
+          width: "100%",
+        }}
+      >
+        <NavBar />
+      </div>
+      <div
         className="container text-center "
         style={{
           paddingTop: "50px",
@@ -80,12 +88,22 @@ const HeroPage = () => {
               Chat with any PDF
             </h1>
             <div className="row buttonCol">
-              <div className="col-md-4 col-lg-4 col-sm-12 mt-3 mt-lg-0 ">
+              <div
+                className="col-md-4 col-lg-4 col-sm-12 mt-3 mt-lg-0 "
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 <Button
                   style={{
                     width: "100%",
                     background: "transparent",
                     border: "1px solid #bccadf",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                   className="headerButton"
                   icon={<IconDiscord />}
@@ -93,12 +111,22 @@ const HeroPage = () => {
                   Join Discord
                 </Button>
               </div>
-              <div className="col-md-4 col-lg-4 col-sm-12 mt-3 mt-lg-0 ">
+              <div
+                className="col-md-4 col-lg-4 col-sm-12 mt-3 mt-lg-0 "
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 <Button
                   style={{
                     width: "100%",
                     background: "transparent",
                     border: "1px solid #bccadf",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                   icon={<IconTwitterSquare />}
                   className="headerButton"
@@ -106,12 +134,22 @@ const HeroPage = () => {
                   Post on Twitter
                 </Button>
               </div>
-              <div className="col-md-4 col-lg-4 col-sm-12 mt-3 mt-lg-0 ">
+              <div
+                className="col-md-4 col-lg-4 col-sm-12 mt-3 mt-lg-0 "
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 <Button
                   style={{
                     width: "100%",
                     background: "transparent",
                     border: "1px solid #bccadf",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                   icon={<IconFacebook />}
                   className="headerButton"
