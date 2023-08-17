@@ -41,7 +41,7 @@ const ChatComp = ({ id }) => {
     try {
       setLoading(true);
       const response = await fetch(
-        `http://localhost:8000/api/v1/chatdoc/chat?source_id=${documentId}&query=${userMessage}`
+        `${process.env.NEXT_PUBLIC_API_BASS_URL}/api/v1/chatdoc/chat?source_id=${documentId}&query=${userMessage}`
       );
       const data = await response.json();
       console.log(data.result.reply);
@@ -66,7 +66,7 @@ const ChatComp = ({ id }) => {
     if (messages.length === 0) {
       try {
         const response = await fetch(
-          `http://localhost:8000/api/v1/chatdoc/chat_history?source_id=${documentId}`
+          `${process.env.NEXT_PUBLIC_API_BASS_URL}/api/v1/chatdoc/chat_history?source_id=${documentId}`
         );
         const data = await response.json();
         console.log("kusal :", data.result?.chat_history);

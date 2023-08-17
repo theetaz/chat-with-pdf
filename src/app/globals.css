@@ -11,12 +11,23 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  background: rgb(184, 214, 248);
-  background: linear-gradient(
-    175deg,
-    rgba(184, 214, 248, 1) 10%,
-    rgba(253, 214, 235, 1) 100%
+  background: rgb(243, 231, 233);
+  background: -moz-linear-gradient(
+    180deg,
+    rgba(243, 231, 233, 1) 0%,
+    rgba(251, 252, 219, 1) 100%
   );
+  background: -webkit-linear-gradient(
+    180deg,
+    rgba(243, 231, 233, 1) 0%,
+    rgba(251, 252, 219, 1) 100%
+  );
+  background: linear-gradient(
+    180deg,
+    rgba(243, 231, 233, 1) 0%,
+    rgba(251, 252, 219, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f3e7e9",endColorstr="#fbfcdb",GradientType=1);
 }
 
 @media screen and (min-width: 1200px) {
@@ -102,4 +113,16 @@ body {
 
 .sider-uploader .ant-upload-list.ant-upload-list-text {
   display: none !important;
+}
+.mobile-nav-menu{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #2b2828;
+  opacity: 0.9;
+  z-index: 999;
+  padding: 5px 5px 15px 5px;
+  margin: 40px 5px;
+  border-radius: 10px;
 }
