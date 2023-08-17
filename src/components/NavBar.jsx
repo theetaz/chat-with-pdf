@@ -69,19 +69,19 @@ const NavBar = () => {
             lineHeight: "20px",
           }}
         >
-          <Link href="/" className="text-decoration-none text-black me-3">
+          <Link href="/" className="text-decoration-none text-black me-5">
             Pricing
           </Link>
-          <Link href="/" className="text-decoration-none text-black me-3">
+          <Link href="/" className="text-decoration-none text-black me-5">
             FAQ
           </Link>
           <Link
             href="/"
-            className="text-decoration-none text-black me-3"
+            className="text-decoration-none text-black me-5"
           >
             Affliate
           </Link>
-          <Link href="/" className="text-decoration-none text-black me-3">
+          <Link href="/" className="text-decoration-none text-black me-5">
             About
           </Link>
         </div>

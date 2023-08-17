@@ -181,21 +181,21 @@ const HeroPage = () => {
         <div
           className=""
           style={{
-            marginTop: "30px",
+            marginTop: "50px",
           }}
         >
           <div className="row">
             <div>
               <h2
                 style={{
-                  fontSize: "24px",
+                  fontSize: "22px",
                 }}
               >
                 ChatPDF in a Nutshell
               </h2>
               <p
                 style={{
-                  fontSize: "18px",
+                  fontSize: "16px",
                   color: "rgba(0, 0, 0, 0.45)",
                   lineHeight: "1.57",
                 }}
@@ -265,7 +265,7 @@ const HeroPage = () => {
       {/* footer links */}
       <div
         style={{
-          marginTop: "40px",
+          marginTop: "50px",
           marginBottom: "20px",
           display: "flex",
           justifyContent: "center",
