@@ -27,7 +27,7 @@ const Uploader = () => {
       if (localStorage.getItem("userId")) {
         // If it exists, retrieve the unique ID
         userId = localStorage.getItem("userId");
-        console.log("userId :", userId);
+
         setUserId(userId);
       }
     }
@@ -50,13 +50,10 @@ const Uploader = () => {
         setLoading(true);
       }
       if (status !== "uploading") {
-        console.log(info.file, info.fileList);
         setLoading(false);
       }
       if (status === "done") {
         message.success(`${info.file.name} file uploaded successfully.`);
-        console.log(info.file.response.result);
-        console.log("pdf url :", info.file.response.result.source_url);
         setPdfName(info.file.name);
         setPdfLink(info.file.response.result.source_url);
         setSourceId(info.file.response.result.source_id);
@@ -65,9 +62,7 @@ const Uploader = () => {
         message.error(`${info.file.name} file upload failed.`);
       }
     },
-    onDrop(e) {
-      console.log("Dropped files", e.dataTransfer.files);
-    },
+    onDrop(e) {},
   };
 
   //if pdf link is available, store it in local storage according to the source id
@@ -99,7 +94,7 @@ const Uploader = () => {
 
   return (
     <>
-      <Dragger {...props} className="uploader" >
+      <Dragger {...props} className="uploader">
         {loading && <Spin size="large" />}
         <p className="ant-upload-drag-icon">+ New Chat</p>
         <p className="ant-upload-text">Click or drag PDF file</p>

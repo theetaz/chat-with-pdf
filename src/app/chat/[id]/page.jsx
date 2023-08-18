@@ -26,7 +26,6 @@ export default function Page({ params }) {
       if (localStorage.getItem(`${id}name`)) {
         // If it exists, retrieve the unique ID
         pdfName = localStorage.getItem(`${id}name`);
-        console.log("pdfName from LS :", pdfName);
         setPdfFileName(pdfName);
       }
     }

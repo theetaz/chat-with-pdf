@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Form, Input, List, Space } from "antd";
+import { Button, Form, Input, List, Space, message } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -12,9 +12,6 @@ const ChatComp = ({ id }) => {
 
   //testing
   let documentId = id;
-  useEffect(() => {
-    console.log("documentId :", documentId);
-  }, [documentId]);
 
   //getting summary from redux store
   const summary = useSelector((state) => state.data.setSummary);
@@ -32,7 +29,7 @@ const ChatComp = ({ id }) => {
     if (userMessage.replace(/\s/g, "").length === 0) {
       return;
     }
-    console.log("backend :", userMessage);
+
     setMessages((messages) => [
       ...messages,
       { msg: userMessage, sender: "user" },
@@ -44,7 +41,6 @@ const ChatComp = ({ id }) => {
         `${process.env.NEXT_PUBLIC_API_BASS_URL}/api/v1/chatdoc/chat?source_id=${documentId}&query=${userMessage}`
       );
       const data = await response.json();
-      console.log(data.result.reply);
       setMessages((messages) => [
         ...messages,
         { msg: data.result.reply, sender: "ai" },
@@ -52,6 +48,7 @@ const ChatComp = ({ id }) => {
       setLoading(false);
     } catch (error) {
       console.log(error);
+      message.error(error.message);
       setLoading(false);
     }
   };
@@ -69,7 +66,7 @@ const ChatComp = ({ id }) => {
           `${process.env.NEXT_PUBLIC_API_BASS_URL}/api/v1/chatdoc/chat_history?source_id=${documentId}`
         );
         const data = await response.json();
-        console.log("kusal :", data.result?.chat_history);
+
         setMessages(data.result?.chat_history);
       } catch (error) {
         console.log(error);
