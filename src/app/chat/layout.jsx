@@ -31,7 +31,6 @@ export default function ChatLayout({ children }) {
         // If it exists, retrieve the unique ID
         userId = localStorage.getItem("userId");
         setUserId(userId);
-        console.log("userId :", userId);
       }
     }
   }, []);
@@ -43,11 +42,9 @@ export default function ChatLayout({ children }) {
         `${process.env.NEXT_PUBLIC_API_BASS_URL}/api/v1/chatdoc/recent_chat?userid=${userId}`
       );
       const data = await response.json();
-      console.log(data.result.recent_chats);
+
       setRecentChats(data.result.recent_chats);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -63,7 +60,6 @@ export default function ChatLayout({ children }) {
   const urlParam = useSelector((state) => state.data.setUrlParam);
 
   useEffect(() => {
-    console.log("selectedKey :", urlParam);
     setSelectedKey(urlParam);
   }, [urlParam]);
 
@@ -77,7 +73,6 @@ export default function ChatLayout({ children }) {
   });
 
   const handleClick = (e) => {
-    console.log("click ", e.key);
     setSelectedKey(e.key);
     router.push(`/chat/${e.key}`);
   };
@@ -91,12 +86,8 @@ export default function ChatLayout({ children }) {
       <Sider
         breakpoint="lg"
         collapsedWidth="0"
-        onBreakpoint={(broken) => {
-          console.log(broken);
-        }}
-        onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
-        }}
+        onBreakpoint={(broken) => {}}
+        onCollapse={(collapsed, type) => {}}
         width={300}
         style={{
           display: "flex",

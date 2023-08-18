@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="d-flex flex-column align-items-center justify-content-center">
         <div className="mb-2">
           <Link
-            href="/about"
+            href="/"
             style={{
               marginRight: "35px",
               textDecoration: "none",
@@ -18,7 +18,7 @@ const Footer = () => {
             About
           </Link>
           <Link
-            href="/about"
+            href="/"
             style={{
               marginRight: "35px",
               textDecoration: "none",
@@ -29,7 +29,7 @@ const Footer = () => {
             Pricing
           </Link>
           <Link
-            href="/about"
+            href="/"
             style={{
               marginRight: "35px",
               textDecoration: "none",
@@ -40,18 +40,7 @@ const Footer = () => {
             FAQ
           </Link>
           <Link
-            href="/about"
-            style={{
-              marginRight: "35px",
-              textDecoration: "none",
-              color: "#8496aa",
-              fontSize: "14px",
-            }}
-          >
-            Affiliate
-          </Link>
-          <Link
-            href="/about"
+            href="/"
             style={{
               marginRight: "25px",
               textDecoration: "none",

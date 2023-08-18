@@ -9,7 +9,7 @@ import Uploader from "@/components/Uploader";
 import IconDiscord from "@/icons/IconDiscord";
 import IconFacebook from "@/icons/IconFacebook";
 import IconTwitterSquare from "@/icons/IconTwitterSquare";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
@@ -34,14 +34,14 @@ const HeroPage = () => {
         // If it exists, retrieve the unique ID
         userId = localStorage.getItem("userId");
         setUserId(userId);
-        console.log("userId :", userId);
+        
       } else {
         // If it doesn't exist, generate a new unique ID
         userId = uuidv4();
         // Store the unique ID in local storage
         localStorage.setItem("userId", userId);
         setUserId(userId);
-        console.log("userId :", userId);
+      
       }
     }
   }, []);
@@ -54,10 +54,11 @@ const HeroPage = () => {
         `${process.env.NEXT_PUBLIC_API_BASS_URL}/api/v1/chatdoc/recent_chat?userid=${userId}`
       );
       const data = await response.json();
-      console.log(data.result?.recent_chats);
+    
       setRecentChats(data.result?.recent_chats);
     } catch (error) {
       console.log(error);
+      message.error(error.message);
     }
   };
 

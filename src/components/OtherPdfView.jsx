@@ -9,10 +9,7 @@ export default function OtherPdfView({ id }) {
   const [urlPdf, setUrlPdf] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  //testing
-  useEffect(() => {
-    console.log("sourceId :", sourceId);
-  }, [sourceId]);
+  
 
   //get pdf url from local storage
   useEffect(() => {
@@ -24,7 +21,7 @@ export default function OtherPdfView({ id }) {
         // If it exists, retrieve the unique ID
         pdfUrl = localStorage.getItem(`${sourceId}`);
         setUrlPdf(pdfUrl);
-        console.log("pdfUrl from LS :", pdfUrl);
+        
         setLoading(false);
       }
     }
