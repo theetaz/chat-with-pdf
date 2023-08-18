@@ -5,13 +5,14 @@ const Footer = () => {
   return (
     <>
       <div className="d-flex flex-column align-items-center justify-content-center">
-        <div>
+        <div className="mb-2">
           <Link
             href="/about"
             style={{
               marginRight: "35px",
               textDecoration: "none",
               color: "#8496aa",
+              fontSize: "14px",
             }}
           >
             About
@@ -22,6 +23,7 @@ const Footer = () => {
               marginRight: "35px",
               textDecoration: "none",
               color: "#8496aa",
+              fontSize: "14px",
             }}
           >
             Pricing
@@ -32,6 +34,7 @@ const Footer = () => {
               marginRight: "35px",
               textDecoration: "none",
               color: "#8496aa",
+              fontSize: "14px",
             }}
           >
             FAQ
@@ -42,6 +45,7 @@ const Footer = () => {
               marginRight: "35px",
               textDecoration: "none",
               color: "#8496aa",
+              fontSize: "14px",
             }}
           >
             Affiliate
@@ -52,21 +56,23 @@ const Footer = () => {
               marginRight: "25px",
               textDecoration: "none",
               color: "#8496aa",
+              fontSize: "14px",
             }}
           >
             Twitter
           </Link>
         </div>
-        <div style={{
-          color: "#8496aa",
-          fontSize: "14px",
-        }}> 
-          Copyright chat-with-pdf 2023, All Rights Reserved. Powered{" "}by{" "}
+        <div
+          style={{
+            color: "#8496aa",
+            fontSize: "12px",
+          }}
+        >
+          Copyright chat-with-pdf 2023, All Rights Reserved. Powered by{" "}
           <Link
             href="/"
             style={{
               textDecoration: "none",
-              
             }}
           >
             Perfectus
