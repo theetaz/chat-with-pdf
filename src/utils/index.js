@@ -20,14 +20,14 @@ const truncateTitle = (title) => {
 const calculateTheTime = (date) => {
   //convert created date and time to timestamp
   const timestamp = dayjs(date, "YYYY-MM-DD HH:mm:ss").unix();
-  console.log("1 timestamp :", timestamp);
+
 
   const now = dayjs().unix();
-  console.log("2 now :", now);
+ 
 
   // get the difference between now and the created date
   let diff = now - timestamp;
-  console.log("3 diff :", diff);
+
 
   if (diff < 60) {
     return diff + " seconds ago";

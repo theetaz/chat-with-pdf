@@ -75,12 +75,6 @@ const NavBar = () => {
           <Link href="/" className="text-decoration-none text-black me-5">
             FAQ
           </Link>
-          <Link
-            href="/"
-            className="text-decoration-none text-black me-5"
-          >
-            Affliate
-          </Link>
           <Link href="/" className="text-decoration-none text-black me-5">
             About
           </Link>
@@ -88,7 +82,7 @@ const NavBar = () => {
         <div className="d-flex align-items-center">
           <Link
             className="text-decoration-none text-black me-3"
-            href="/login"
+            href="/"
             style={{
               fontSize: "14px",
               fontWeight: "400",
@@ -183,7 +177,7 @@ const NavBar = () => {
             <div className="d-flex justify-content-center align-items-center mt-4">
               <Button
                 className="text-decoration-none text-white "
-                href="/login"
+                href="/"
                 style={{
                   fontSize: "14px",
                   fontWeight: "400",
