@@ -40,17 +40,19 @@ const NavBar = () => {
         className="d-none d-md-flex"
       >
         <div>
-          <span
-            style={{
-              fontSize: "22px",
-              fontWeight: "300",
-              lineHeight: "20px",
-              fontStyle: "italic",
-            }}
-          >
-            smart
-          </span>
-          <span
+          <Link href="/" className="text-decoration-none text-black">
+            <span
+              style={{
+                fontSize: "22px",
+                fontWeight: "700",
+                lineHeight: "20px",
+                fontStyle: "italic",
+              }}
+            >
+              SmartAIDoc
+            </span>
+          </Link>
+          {/* <span
             style={{
               fontSize: "22px",
               fontWeight: "700",
@@ -59,7 +61,7 @@ const NavBar = () => {
             }}
           >
             .pdf
-          </span>
+          </span> */}
         </div>
         <div
           className="d-flex align-items-center"
@@ -69,7 +71,10 @@ const NavBar = () => {
             lineHeight: "20px",
           }}
         >
-          <Link href="/" className="text-decoration-none text-black me-5">
+          <Link
+            href="/pricing"
+            className="text-decoration-none text-black me-5"
+          >
             Pricing
           </Link>
           <Link href="/" className="text-decoration-none text-black me-5">
@@ -115,14 +120,14 @@ const NavBar = () => {
             <span
               style={{
                 fontSize: "22px",
-                fontWeight: "300",
+                fontWeight: "700",
                 lineHeight: "20px",
                 fontStyle: "italic",
               }}
             >
-              smart
+              SmarAIDoc
             </span>
-            <span
+            {/* <span
               style={{
                 fontSize: "22px",
                 fontWeight: "700",
@@ -131,7 +136,7 @@ const NavBar = () => {
               }}
             >
               .pdf
-            </span>
+            </span> */}
           </div>
           <div
             className="d-flex align-items-center "
@@ -149,28 +154,18 @@ const NavBar = () => {
           <div className="d-flex flex-column mobile-nav-menu">
             <div className="d-flex flex-column align-items-center justify-content-center">
               <Link
-                href="/"
+                href="/pricing"
                 className="text-decoration-none text-white mt-2"
-                style={{}}
               >
                 Pricing
               </Link>
-              <Link
-                href="/"
-                className="text-decoration-none text-white mt-2"
-              >
+              <Link href="/" className="text-decoration-none text-white mt-2">
                 FAQ
               </Link>
-              <Link
-                href="/"
-                className="text-decoration-none text-white mt-2"
-              >
+              <Link href="/" className="text-decoration-none text-white mt-2">
                 Affliate
               </Link>
-              <Link
-                href="/"
-                className="text-decoration-none text-white mt-2"
-              >
+              <Link href="/" className="text-decoration-none text-white mt-2">
                 About
               </Link>
             </div>

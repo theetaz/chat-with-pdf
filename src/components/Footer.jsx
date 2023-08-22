@@ -57,12 +57,13 @@ const Footer = () => {
             fontSize: "12px",
           }}
         >
-          Copyright chat-with-pdf 2023, All Rights Reserved. Powered by{" "}
+          Copyright SmartAIDocs 2023, All Rights Reserved. Powered by{" "}
           <Link
-            href="/"
+            href="https://perfectustec.com/"
             style={{
               textDecoration: "none",
             }}
+            target="_blank"
           >
             Perfectus
           </Link>
