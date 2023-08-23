@@ -40,7 +40,7 @@ const Uploader = () => {
     headers: {
       ContentType: "application/pdf",
     },
-    accept: ".pdf, .xlsx , .csv,",
+    accept: ".pdf, .xlsx , .csv, .pptx , .ppt , .docx , .doc",
     data: {
       userid: userId,
     },

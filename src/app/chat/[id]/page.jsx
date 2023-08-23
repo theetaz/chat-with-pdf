@@ -2,6 +2,7 @@
 
 import ChatComp from "@/components/ChatComp";
 import CsvViewer from "@/components/CsvViewer";
+import DocsViewer from "@/components/DocsViewer";
 import OtherPdfView from "@/components/OtherPdfView";
 import PptViewer from "@/components/PptViewer";
 import { setUrlParam } from "@/feature/dataslice";
@@ -105,8 +106,16 @@ export default function Page({ params }) {
               <CsvViewer id={id} />
             </div>
           ) : fileType === "pptx" || fileType === "ppt" ? (
-            <div>
+            <div
+              style={{
+                height: "100%",
+              }}
+            >
               <PptViewer id={id} />
+            </div>
+          ) : fileType === "docx" || fileType === "doc" ? (
+            <div>
+              <DocsViewer id={id} />
             </div>
           ) : null}
         </div>
