@@ -91,6 +91,7 @@ body {
   padding: 6px 12px;
   box-shadow: 0 0 3px #d1d2da;
   font-size: 12px;
+  overflow: auto;
 }
 
 .chatBubble.user .chatMessage {
@@ -125,4 +126,8 @@ body {
   padding: 5px 5px 15px 5px;
   margin: 40px 5px;
   border-radius: 10px;
+}
+
+.Free-footer{
+  display: none !important;
 }

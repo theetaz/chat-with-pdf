@@ -21,13 +21,10 @@ const calculateTheTime = (date) => {
   //convert created date and time to timestamp
   const timestamp = dayjs(date, "YYYY-MM-DD HH:mm:ss").unix();
 
-
   const now = dayjs().unix();
- 
 
   // get the difference between now and the created date
   let diff = now - timestamp;
-
 
   if (diff < 60) {
     return diff + " seconds ago";
@@ -35,10 +32,15 @@ const calculateTheTime = (date) => {
     // convert diff to minutes
     let minutes = Math.floor(diff / 60);
     return minutes + (minutes > 1 ? " minutes ago" : " minute ago");
+  } else if (diff < 3600 * 24) {
+    // convert diff to hours
+    let hours = Math.floor(diff / 3600);
+    return hours + (hours > 1 ? " hours ago" : " hour ago");
+  } else if (diff < 3600 * 24 * 7) {
+    // convert diff to days
+    let days = Math.floor(diff / (3600 * 24));
+    return days + (days > 1 ? " days ago" : " day ago");
   }
-  // convert diff to hours
-  let hours = Math.floor(diff / 3600);
-  return hours + (hours > 1 ? " hours ago" : " hour ago");
 };
 
 export { truncateText, calculateTheTime, truncateTitle };

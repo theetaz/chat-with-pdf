@@ -92,7 +92,7 @@ const HeroPage = () => {
               }}
               className="text-capitalize fw-semibold fs-1 "
             >
-              Chat with any PDF
+              Chat with Docs
             </h1>
             <div className="row buttonCol">
               <div
@@ -192,7 +192,7 @@ const HeroPage = () => {
                   fontSize: "22px",
                 }}
               >
-                ChatPDF in a Nutshell
+                SmartAIDoc in a Nutshell
               </h2>
               <p
                 style={{
@@ -201,7 +201,7 @@ const HeroPage = () => {
                   lineHeight: "1.57",
                 }}
               >
-                Your PDF AI - like ChatGPT but for PDFs. Summarize and answer
+                Your document AI - like ChatGPT but for pdf, csv, excel and powerpoint docs. Summarize and answer
                 questions for free.
               </p>
             </div>
@@ -237,7 +237,7 @@ const HeroPage = () => {
                 icon={<TfiWorld size={"25px"} />}
                 title={"Any Language"}
                 description1={
-                  "Works worldwide! ChatPDF accepts PDFs in any language and can chat in any language."
+                  "Works worldwide! SmartAIDocs accepts documents in any language and can chat in any language."
                 }
               />
             </div>
@@ -246,7 +246,7 @@ const HeroPage = () => {
                 icon={<BsChatLeftQuote size={"25px"} />}
                 title={"Cited Sources"}
                 description1={
-                  "Answers contain references to their source in the original PDF document. No more flipping pages."
+                  "Answers contain references to their source in the original document. No more flipping pages."
                 }
               />
             </div>

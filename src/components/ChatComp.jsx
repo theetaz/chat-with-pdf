@@ -3,6 +3,8 @@
 import { Button, Form, Input, List, Space, message } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const ChatComp = ({ id }) => {
   const [userMessage, setUserMessage] = useState("");
@@ -137,7 +139,12 @@ const ChatComp = ({ id }) => {
             split={false}
             renderItem={(item, index) => (
               <List.Item key={index} className={`chatBubble ${item.sender}`}>
-                <div className="chatMessage">{item?.msg}</div>
+                <div className="chatMessage">
+                  <ReactMarkdown
+                    children={item?.msg}
+                    remarkPlugins={[remarkGfm]}
+                  />
+                </div>
               </List.Item>
             )}
             style={{

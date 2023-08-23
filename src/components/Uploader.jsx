@@ -40,7 +40,7 @@ const Uploader = () => {
     headers: {
       ContentType: "application/pdf",
     },
-    accept: ".pdf",
+    accept: ".pdf, .xlsx , .csv, .pptx , .ppt , .docx , .doc",
     data: {
       userid: userId,
     },
@@ -97,7 +97,9 @@ const Uploader = () => {
       <Dragger {...props} className="uploader">
         {loading && <Spin size="large" />}
         <p className="ant-upload-drag-icon">+ New Chat</p>
-        <p className="ant-upload-text">Click or drag PDF file</p>
+        <p className="ant-upload-text">
+          Click or drag pdf, csv, excel or powerpoint file
+        </p>
       </Dragger>
     </>
   );
