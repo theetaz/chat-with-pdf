@@ -1,7 +1,10 @@
 "use client";
 
 import ChatComp from "@/components/ChatComp";
+import CsvViewer from "@/components/CsvViewer";
+import DocsViewer from "@/components/DocsViewer";
 import OtherPdfView from "@/components/OtherPdfView";
+import PptViewer from "@/components/PptViewer";
 import { setUrlParam } from "@/feature/dataslice";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -16,6 +19,7 @@ export default function Page({ params }) {
   }, [id]);
 
   const [pdfFileName, setPdfFileName] = useState(null);
+  const [fileType, setFileType] = useState(null);
 
   //get pdf name from local storage
   useEffect(() => {
@@ -31,6 +35,16 @@ export default function Page({ params }) {
     }
   }, [id]);
 
+  //based on name identify the file type
+
+  useEffect(() => {
+    if (pdfFileName) {
+      let fileType = pdfFileName.split(".").pop();
+      setFileType(fileType);
+      console.log(fileType);
+    }
+  }, [pdfFileName]);
+
   return (
     <div
       style={{
@@ -40,7 +54,7 @@ export default function Page({ params }) {
         overflowX: "hidden",
       }}
     >
-      {/* pdf viewer */}
+      {/* viewer */}
 
       <div
         style={{
@@ -81,9 +95,29 @@ export default function Page({ params }) {
               {pdfFileName}
             </h1>
           </div>
-          <div>
-            <OtherPdfView id={id} />
-          </div>
+          {fileType && fileType === "pdf" ? (
+            <div>
+              <OtherPdfView id={id} />
+            </div>
+          ) : fileType === "xlsx" ||
+            fileType === "xls" ||
+            fileType === "csv" ? (
+            <div>
+              <CsvViewer id={id} />
+            </div>
+          ) : fileType === "pptx" || fileType === "ppt" ? (
+            <div
+              style={{
+                height: "100%",
+              }}
+            >
+              <PptViewer id={id} />
+            </div>
+          ) : fileType === "docx" || fileType === "doc" ? (
+            <div>
+              <DocsViewer id={id} />
+            </div>
+          ) : null}
         </div>
       </div>
 
