@@ -68,7 +68,7 @@ export default function Page({ params }) {
             display: "flex",
             flexDirection: "column",
             height: "100%",
-            backgroundColor: "#ffffff",
+            backgroundColor: "#F6F4EB",
           }}
         >
           <div
@@ -123,9 +123,10 @@ export default function Page({ params }) {
 
       <div
         style={{
-          backgroundColor: "rgb(238, 238 ,238 )",
+          backgroundColor: "#fff",
           width: "4px",
           height: "100vh",
+          
         }}
       />
       {/* chats */}
@@ -133,7 +134,7 @@ export default function Page({ params }) {
         style={{
           flex: "33.5068 1 0px",
           overflow: "hidden",
-          backgroundColor: "#e8e8e8",
+          backgroundColor: "#Ffffff",
         }}
       >
         <ChatComp id={id} />

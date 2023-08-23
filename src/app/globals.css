@@ -57,6 +57,17 @@ body {
   text-align: start;
 }
 
+.uploader-container .uploader .ant-upload.ant-upload-btn {
+  background: #ffffff;
+  border-radius: 8px;
+  height: 150px;
+}
+
+.uploader-container .ant-upload-text{
+  font-size: 18px;
+  font-weight: 500;
+}
+
 .uploader .ant-upload.ant-upload-btn {
   background: #ffffff5e;
   border-radius: 8px;
@@ -81,7 +92,7 @@ body {
 }
 
 .chatBubble.ai .chatMessage {
-  background: #f9f9fe;
+  background: #fbfcdb;
 }
 
 .chatMessage {
@@ -95,8 +106,8 @@ body {
 }
 
 .chatBubble.user .chatMessage {
-  background: #4096ff;
-  color: #fff;
+  background: #f3e7e9;
+  color: #000000;
 }
 
 .site-layout-background .ant-layout-sider-children {
@@ -130,4 +141,9 @@ body {
 
 .Free-footer{
   display: none !important;
+}
+
+/* spinner */
+.ant-spin-dot-item{
+  background-color: #000 !important;
 }
