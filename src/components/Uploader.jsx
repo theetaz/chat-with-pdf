@@ -98,7 +98,7 @@ const Uploader = () => {
         {loading && <Spin size="large" />}
         <p className="ant-upload-drag-icon">+ New Chat</p>
         <p className="ant-upload-text">
-          Click or drag pdf, csv, excel or powerpoint file
+          Click or drag .pdf, .csv, .xlsx, .pptx or .docx
         </p>
       </Dragger>
     </>
