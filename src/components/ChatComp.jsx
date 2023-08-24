@@ -85,7 +85,7 @@ const ChatComp = ({ id }) => {
   return (
     <div
       style={{
-        backgroundColor: "#ffffff",
+        backgroundColor: "#F6F4EB",
         display: "flex",
         flexDirection: "column",
         flexGrow: "1",
@@ -97,7 +97,7 @@ const ChatComp = ({ id }) => {
         style={{
           height: "42px",
           padding: "0px 6px",
-          backgroundColor: "#ffffff",
+          backgroundColor: "#F6F4EB",
           display: "flex",
           alignItems: "center",
           flexShrink: "0",
@@ -189,7 +189,7 @@ const ChatComp = ({ id }) => {
               onChange={(e) => setUserMessage(e.target.value)}
             />
             <Button
-              type="primary"
+              type="default"
               htmlType="submit"
               style={{
                 marginLeft: "3px",

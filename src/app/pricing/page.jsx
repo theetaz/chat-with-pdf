@@ -30,11 +30,11 @@ export default function Pricing() {
           >
             <PricingCard
               title={"Free"}
-              monthlyPrice={"0"}
+              monthlyPrice={"$0"}
               features={[
-                "120 pages/PDF",
-                "10 MB/PDF",
-                "3 PDFs/day",
+                "120 pages/Document",
+                "10 MB/Document",
+                "3 Documents/day",
                 "50 questions/day",
               ]}
             />
@@ -44,11 +44,11 @@ export default function Pricing() {
           }}>
             <PricingCard
               title={"plus"}
-              monthlyPrice={"5"}
+              monthlyPrice={"$5"}
               features={[
-                "2,000 pages/PDF",
-                "32 MB/PDF",
-                "50 PDFs/day",
+                "2,000 pages/Document",
+                "32 MB/Document",
+                "50 Documents/day",
                 "1000 questions/day",
               ]}
             />
