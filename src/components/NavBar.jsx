@@ -4,8 +4,10 @@ import { Button } from "antd";
 import Link from "next/link";
 import { MenuOutlined, CloseSquareOutlined } from "@ant-design/icons";
 import { useState, useEffect, useRef } from "react";
+import { useSession, signOut } from "next-auth/react";
 
 const NavBar = () => {
+  const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -85,17 +87,35 @@ const NavBar = () => {
           </Link>
         </div>
         <div className="d-flex align-items-center">
-          <Link
-            className="text-decoration-none text-black me-3"
-            href="/"
-            style={{
-              fontSize: "14px",
-              fontWeight: "400",
-              lineHeight: "20px",
-            }}
-          >
-            Login
-          </Link>
+          {session?.user ? (
+            <>
+              <Button
+                className="text-decoration-none text-black me-3"
+                onClick={() => signOut()}
+                style={{
+                  fontSize: "14px",
+                  fontWeight: "400",
+                  lineHeight: "20px",
+                }}
+              >
+                Sign Out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link
+                className="text-decoration-none text-black me-3"
+                href="/sign-in"
+                style={{
+                  fontSize: "14px",
+                  fontWeight: "400",
+                  lineHeight: "20px",
+                }}
+              >
+                Login
+              </Link>
+            </>
+          )}
           <Button
             style={{
               width: "100%",
@@ -172,7 +192,7 @@ const NavBar = () => {
             <div className="d-flex justify-content-center align-items-center mt-4">
               <Button
                 className="text-decoration-none text-white "
-                href="/"
+                href="api/auth/signin"
                 style={{
                   fontSize: "14px",
                   fontWeight: "400",

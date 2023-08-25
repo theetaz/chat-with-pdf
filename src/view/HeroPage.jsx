@@ -10,7 +10,7 @@ import IconDiscord from "@/icons/IconDiscord";
 import IconFacebook from "@/icons/IconFacebook";
 import IconTwitterSquare from "@/icons/IconTwitterSquare";
 import { Button, message } from "antd";
-import { useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { PiStudentBold } from "react-icons/pi";
@@ -19,12 +19,21 @@ import { LiaPasteSolid } from "react-icons/lia";
 import { TfiWorld } from "react-icons/tfi";
 import { BsChatLeftQuote } from "react-icons/bs";
 import { AiOutlineLock } from "react-icons/ai";
+import { useSession } from "next-auth/react";
 
-const HeroPage = () => {
-  const dispatch = useDispatch();
+const HeroPage =  () => {
+  const { data: session , status } = useSession();
 
   const [userId, setUserId] = useState(null);
   const [recentChats, setRecentChats] = useState([]);
+
+  //tesing session
+
+  useEffect(() => {
+    console.log("session", session);
+    console.log("status", status);
+  }, [session , status]);
+
   useEffect(() => {
     let userId = "";
 
@@ -34,14 +43,12 @@ const HeroPage = () => {
         // If it exists, retrieve the unique ID
         userId = localStorage.getItem("userId");
         setUserId(userId);
-        
       } else {
         // If it doesn't exist, generate a new unique ID
         userId = uuidv4();
         // Store the unique ID in local storage
         localStorage.setItem("userId", userId);
         setUserId(userId);
-      
       }
     }
   }, []);
@@ -54,7 +61,7 @@ const HeroPage = () => {
         `${process.env.NEXT_PUBLIC_API_BASS_URL}/api/v1/chatdoc/recent_chat?userid=${userId}`
       );
       const data = await response.json();
-    
+
       setRecentChats(data.result?.recent_chats);
     } catch (error) {
       console.log(error);
@@ -201,8 +208,8 @@ const HeroPage = () => {
                   lineHeight: "1.57",
                 }}
               >
-                Your document AI - like ChatGPT but for pdf, csv, excel and powerpoint docs. Summarize and answer
-                questions for free.
+                Your document AI - like ChatGPT but for pdf, csv, excel and
+                powerpoint docs. Summarize and answer questions for free.
               </p>
             </div>
             <div className="col-md-4 col-sm-12 d-flex justify-content-center  ">
