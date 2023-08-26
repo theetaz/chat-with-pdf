@@ -20,16 +20,14 @@ export const options = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "email", placeholder: "Your Email" },
+        username: {
+          label: "Username",
+          type: "email",
+          placeholder: "Your Email",
+        },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        // You need to provide your own logic here that takes the credentials
-        // submitted and returns either a object representing a user or value
-        // that is false/null if the credentials are invalid.
-        // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
-        // You can also use the `req` object to obtain additional parameters
-        // (i.e., the request IP address)
         const res = await fetch("/your/endpoint", {
           method: "POST",
           body: JSON.stringify(credentials),
@@ -51,17 +49,22 @@ export const options = {
     signIn: "/sign-in",
   },
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      return true;
-    },
-    async redirect({ url, baseUrl }) {
-      return baseUrl;
-    },
-    async session({ session, user }) {
-      return session;
+    async signIn({ user, account, profile }) {
+      return user;
     },
     async jwt({ token, user, account, profile, isNewUser }) {
-      return token;
+      // add a access_token to the token right after signin
+
+      if (user) {
+        token.accessToken = "123456789";
+      }
+
+      return { ...token, ...user, ...account, ...profile };
+    },
+    async session({ session, token, account, profile }) {
+      // Add property to session, like an access_token from a provider.
+
+      return { ...session, ...token, ...account, ...profile };
     },
   },
 };
