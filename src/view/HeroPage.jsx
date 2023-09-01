@@ -11,7 +11,7 @@ import IconFacebook from "@/icons/IconFacebook";
 import IconTwitterSquare from "@/icons/IconTwitterSquare";
 import { Button, message } from "antd";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { PiStudentBold } from "react-icons/pi";
 import { FaMicroscope } from "react-icons/fa";
@@ -19,54 +19,107 @@ import { LiaPasteSolid } from "react-icons/lia";
 import { TfiWorld } from "react-icons/tfi";
 import { BsChatLeftQuote } from "react-icons/bs";
 import { AiOutlineLock } from "react-icons/ai";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import APIClient from "@/lib/axiosInterceptor";
+import jwt from "jsonwebtoken";
+import { setReloadChatHistory } from "@/feature/dataslice";
 
 const HeroPage = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const { data: session, status } = useSession();
 
   const [userId, setUserId] = useState(null);
   const [recentChats, setRecentChats] = useState([]);
-  useEffect(() => {
-    let userId = "";
 
-    if (typeof window !== "undefined") {
-      // Check if the unique ID exists in local storage
-      if (localStorage.getItem("userId")) {
-        // If it exists, retrieve the unique ID
-        userId = localStorage.getItem("userId");
-        setUserId(userId);
-        
-      } else {
-        // If it doesn't exist, generate a new unique ID
-        userId = uuidv4();
-        // Store the unique ID in local storage
-        localStorage.setItem("userId", userId);
-        setUserId(userId);
-      
-      }
+  //tesing session
+
+  useEffect(() => {
+    console.log("session", session);
+    console.log("status", status);
+    getUserId();
+  }, [session, status]);
+
+  const getUserId = () => {
+    let userId = "";
+    if (session) {
+      const decoded = jwt.decode(session.accessToken);
+      console.log("decoded :", decoded.userid);
+      userId = decoded.userid;
+      setUserId(userId);
     }
-  }, []);
+  };
+
+  const triggerChatHistoryReload = useSelector(
+    (state) => state.data.setReloadChatHistory
+  );
+
+  // useEffect(() => {
+  //   let userId = "";
+
+  //   if (typeof window !== "undefined") {
+  //     // Check if the unique ID exists in local storage
+  //     if (localStorage.getItem("userId")) {
+  //       // If it exists, retrieve the unique ID
+  //       userId = localStorage.getItem("userId");
+  //       setUserId(userId);
+  //     } else {
+  //       // If it doesn't exist, generate a new unique ID
+  //       userId = uuidv4();
+  //       // Store the unique ID in local storage
+  //       localStorage.setItem("userId", userId);
+  //       setUserId(userId);
+  //     }
+  //   }
+  // }, []);
 
   //fetch recent chats from backend
 
+  // const fetchRecentChats = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       `${process.env.NEXT_PUBLIC_API_BASS_URL}/api/v1/chatdoc/recent_chat?userid=${userId}`
+  //     );
+  //     const data = await response.json();
+
+  //     setRecentChats(data.result?.recent_chats);
+  //   } catch (error) {
+  //     console.log(error);
+  //     message.error(error.message);
+  //   }
+  // };
+
   const fetchRecentChats = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASS_URL}/api/v1/chatdoc/recent_chat?userid=${userId}`
-      );
-      const data = await response.json();
-    
-      setRecentChats(data.result?.recent_chats);
-    } catch (error) {
-      console.log(error);
-      message.error(error.message);
+    if (session) {
+      try {
+        const response = await APIClient.get(
+          `/api/v1/chatdoc/recent_chat?userid=${userId}`
+        );
+        const data = response?.data;
+        console.log("recent chats", data.result?.recent_chats);
+        setRecentChats(data.result?.recent_chats);
+        dispatch(setReloadChatHistory(false));
+      } catch (error) {
+        console.log(error);
+        message.error(error.message);
+      }
     }
   };
 
   useEffect(() => {
-    if (userId) {
+    if (userId || triggerChatHistoryReload) {
       fetchRecentChats();
     }
-  }, [userId]);
+  }, [userId, triggerChatHistoryReload]);
+
+  //check the session
+
+  useEffect(() => {
+    if (session === null) {
+      router.push("/sign-in");
+    }
+  }, [session]);
 
   return (
     <>
@@ -201,8 +254,8 @@ const HeroPage = () => {
                   lineHeight: "1.57",
                 }}
               >
-                Your document AI - like ChatGPT but for pdf, csv, excel and powerpoint docs. Summarize and answer
-                questions for free.
+                Your document AI - like ChatGPT but for pdf, csv, excel and
+                powerpoint docs. Summarize and answer questions for free.
               </p>
             </div>
             <div className="col-md-4 col-sm-12 d-flex justify-content-center  ">

@@ -5,6 +5,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   setSummary: "",
   setUrlParam: "",
+  setReloadChatHistory: false,
 };
 
 export const dataSlice = createSlice({
@@ -17,10 +18,13 @@ export const dataSlice = createSlice({
     setUrlParam: (state, action) => {
       state.setUrlParam = action.payload;
     },
+    setReloadChatHistory: (state, action) => {
+      state.setReloadChatHistory = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setSummary, setUrlParam } = dataSlice.actions;
+export const { setSummary, setUrlParam , setReloadChatHistory } = dataSlice.actions;
 
 export default dataSlice.reducer;

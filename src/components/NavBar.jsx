@@ -4,8 +4,12 @@ import { Button } from "antd";
 import Link from "next/link";
 import { MenuOutlined, CloseSquareOutlined } from "@ant-design/icons";
 import { useState, useEffect, useRef } from "react";
+import { useSession, signOut } from "next-auth/react";
+
 
 const NavBar = () => {
+ 
+  const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -26,6 +30,22 @@ const NavBar = () => {
       };
     }
   }, [isMenuOpen]);
+
+  //session console log
+
+  useEffect(() => {
+    if (session) {
+      console.log("navbar " ,session);
+    }
+  }, [session]);
+
+  //sign out if session.accessToken is null
+  useEffect(() => {
+    if (session?.accessToken === null) {
+      
+      signOut();
+    }
+  }, [session]);
 
   return (
     <>
@@ -85,28 +105,87 @@ const NavBar = () => {
           </Link>
         </div>
         <div className="d-flex align-items-center">
-          <Link
-            className="text-decoration-none text-black me-3"
-            href="/"
-            style={{
-              fontSize: "14px",
-              fontWeight: "400",
-              lineHeight: "20px",
-            }}
-          >
-            Login
-          </Link>
-          <Button
-            style={{
-              width: "100%",
-              background: "transparent",
-              border: "1px solid #bccadf",
-              color: "#000000",
-            }}
-            type="primary"
-          >
-            Get started
-          </Button>
+          {session?.accessToken ? (
+            <>
+              <Button
+                className="text-decoration-none text-black me-3"
+                onClick={() => signOut()}
+                style={{
+                  fontSize: "14px",
+                  fontWeight: "400",
+                  lineHeight: "20px",
+                }}
+              >
+                Sign Out
+              </Button>
+              {session?.provider === "github" && (
+                <div>
+                  <img
+                    src={session?.user?.image}
+                    alt=""
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </div>
+              )}
+              {session?.provider === "google" && (
+                <div>
+                  <img
+                    src={session?.user?.image}
+                    alt=""
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </div>
+              )}
+              {session?.provider === "facebook" && (
+                <div>
+                  <img
+                    src={session?.image}
+                    alt=""
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              <Link
+                className="text-decoration-none text-black me-3"
+                href="/sign-in"
+                style={{
+                  fontSize: "14px",
+                  fontWeight: "400",
+                  lineHeight: "20px",
+                }}
+              >
+                Login
+              </Link>
+            </>
+          )}
+          {!session?.accessToken && (
+            <Button
+              style={{
+                width: "100%",
+                background: "transparent",
+                border: "1px solid #bccadf",
+                color: "#000000",
+              }}
+              type="primary"
+            >
+              Get started
+            </Button>
+          )}
         </div>
       </div>
 
@@ -172,7 +251,7 @@ const NavBar = () => {
             <div className="d-flex justify-content-center align-items-center mt-4">
               <Button
                 className="text-decoration-none text-white "
-                href="/"
+                href="api/auth/signin"
                 style={{
                   fontSize: "14px",
                   fontWeight: "400",

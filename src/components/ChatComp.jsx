@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import APIClient from "@/lib/axiosInterceptor";
 
 const ChatComp = ({ id }) => {
   const [userMessage, setUserMessage] = useState("");
@@ -39,10 +40,14 @@ const ChatComp = ({ id }) => {
     setUserMessage("");
     try {
       setLoading(true);
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASS_URL}/api/v1/chatdoc/chat?source_id=${documentId}&query=${userMessage}`
+
+      //authorization added
+      const response = await APIClient.get(
+        `/api/v1/chatdoc/chat?source_id=${documentId}&query=${userMessage}`
       );
-      const data = await response.json();
+
+      const data = response.data;
+
       setMessages((messages) => [
         ...messages,
         { msg: data.result.reply, sender: "ai" },
@@ -64,10 +69,11 @@ const ChatComp = ({ id }) => {
   async function getChatHistory(documentId) {
     if (messages.length === 0) {
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASS_URL}/api/v1/chatdoc/chat_history?source_id=${documentId}`
+        //authorization added
+        const response = await APIClient.get(
+          `/api/v1/chatdoc/chat_history?source_id=${documentId}`
         );
-        const data = await response.json();
+        const data = response.data;
 
         setMessages(data.result?.chat_history);
       } catch (error) {

@@ -2,6 +2,7 @@
 import { calculateTheTime, truncateText, truncateTitle } from "@/utils";
 import { Card } from "antd";
 import { useRouter } from "next/navigation";
+import ChatHistoryDeleteBtn from "./ChatHistoryDeleteBtn";
 
 const ChatHistoryCard = ({ recentChats }) => {
   const router = useRouter();
@@ -19,15 +20,16 @@ const ChatHistoryCard = ({ recentChats }) => {
             style={{
               width: "300px",
               marginRight: "20px",
+              position: "relative",
             }}
           >
+            <ChatHistoryDeleteBtn sourceId={chat.source_id} />
             <Card
               onClick={() => router.push(`/chat/${chat.source_id}`)}
               size="small"
               title={truncateTitle(chat.source_name)}
               style={{
                 width: 300,
-                margin: "10px",
                 cursor: "pointer",
               }}
             >

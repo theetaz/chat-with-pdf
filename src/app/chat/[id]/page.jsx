@@ -8,6 +8,7 @@ import PptViewer from "@/components/PptViewer";
 import { setUrlParam } from "@/feature/dataslice";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import APIClient from "@/lib/axiosInterceptor";
 
 export default function Page({ params }) {
   let id = params.id;
@@ -21,19 +22,38 @@ export default function Page({ params }) {
   const [pdfFileName, setPdfFileName] = useState(null);
   const [fileType, setFileType] = useState(null);
 
-  //get pdf name from local storage
-  useEffect(() => {
-    let pdfName = "";
+  //get document url from db
 
-    if (typeof window !== "undefined") {
-      // Check if the unique ID exists in local storage
-      if (localStorage.getItem(`${id}name`)) {
-        // If it exists, retrieve the unique ID
-        pdfName = localStorage.getItem(`${id}name`);
-        setPdfFileName(pdfName);
-      }
+  const fetchDocUrl = async () => {
+    try {
+      const response = await APIClient.get(
+        `/api/v1/chatdoc/chat_history?source_id=${id}`
+      );
+      const data = response.data;
+      console.log("data", data.result.source_url);
+      setPdfFileName(data?.result?.source_url);
+    } catch (error) {
+      console.log(error);
     }
+  };
+
+  useEffect(() => {
+    fetchDocUrl();
   }, [id]);
+
+  //get pdf name from local storage
+  // useEffect(() => {
+  //   let pdfName = "";
+
+  //   if (typeof window !== "undefined") {
+  //     // Check if the unique ID exists in local storage
+  //     if (localStorage.getItem(`${id}name`)) {
+  //       // If it exists, retrieve the unique ID
+  //       pdfName = localStorage.getItem(`${id}name`);
+  //       setPdfFileName(pdfName);
+  //     }
+  //   }
+  // }, [id]);
 
   //based on name identify the file type
 
@@ -97,13 +117,13 @@ export default function Page({ params }) {
           </div>
           {fileType && fileType === "pdf" ? (
             <div>
-              <OtherPdfView id={id} />
+              <OtherPdfView />
             </div>
           ) : fileType === "xlsx" ||
             fileType === "xls" ||
             fileType === "csv" ? (
             <div>
-              <CsvViewer id={id} />
+              <CsvViewer />
             </div>
           ) : fileType === "pptx" || fileType === "ppt" ? (
             <div
@@ -126,7 +146,6 @@ export default function Page({ params }) {
           backgroundColor: "#fff",
           width: "4px",
           height: "100vh",
-          
         }}
       />
       {/* chats */}

@@ -2,13 +2,17 @@
 
 import { setSummary } from "@/feature/dataslice";
 import { message, Spin, Upload } from "antd";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import jwt from "jsonwebtoken";
 const { Dragger } = Upload;
 
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 const Uploader = () => {
+  const { data: session } = useSession();
+
   const router = useRouter();
   const dispatch = useDispatch();
   const [uploadedFile, setUploadedFile] = useState(null);
@@ -17,21 +21,46 @@ const Uploader = () => {
   const [sourceId, setSourceId] = useState(null);
   const [pdfName, setPdfName] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [accessToken, setAccessToken] = useState(null);
 
-  //get user id from local storage
-  useEffect(() => {
+
+  const getUserId = () => {
     let userId = "";
-
-    if (typeof window !== "undefined") {
-      // Check if the unique ID exists in local storage
-      if (localStorage.getItem("userId")) {
-        // If it exists, retrieve the unique ID
-        userId = localStorage.getItem("userId");
-
-        setUserId(userId);
-      }
+    if (session) {
+      const decoded = jwt.decode(session.accessToken);
+      console.log("decoded :", decoded.userid);
+      userId = decoded.userid;
+      setUserId(userId);
     }
-  });
+  };
+
+  useEffect(() => {
+    getUserId();
+  },[session])
+
+
+
+  // //get user id from local storage
+  // useEffect(() => {
+  //   let userId = "";
+
+  //   if (typeof window !== "undefined") {
+  //     // Check if the unique ID exists in local storage
+  //     if (localStorage.getItem("userId")) {
+  //       // If it exists, retrieve the unique ID
+  //       userId = localStorage.getItem("userId");
+
+  //       setUserId(userId);
+  //     }
+  //   }
+  // });
+
+  useEffect(() => {
+    if (session) {
+      console.log("uploader session", session);
+      setAccessToken(session.accessToken);
+    }
+  }, [session]);
 
   const props = {
     name: "file",
@@ -39,6 +68,7 @@ const Uploader = () => {
     action: `${process.env.NEXT_PUBLIC_API_BASS_URL}/api/v1/chatdoc/`,
     headers: {
       ContentType: "application/pdf",
+      Authorization: `Bearer ${accessToken}`,
     },
     accept: ".pdf, .xlsx , .csv, .pptx , .ppt , .docx , .doc",
     data: {
