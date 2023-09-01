@@ -11,7 +11,7 @@ import IconFacebook from "@/icons/IconFacebook";
 import IconTwitterSquare from "@/icons/IconTwitterSquare";
 import { Button, message } from "antd";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { PiStudentBold } from "react-icons/pi";
 import { FaMicroscope } from "react-icons/fa";
@@ -23,8 +23,10 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import APIClient from "@/lib/axiosInterceptor";
 import jwt from "jsonwebtoken";
+import { setReloadChatHistory } from "@/feature/dataslice";
 
 const HeroPage = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const { data: session, status } = useSession();
 
@@ -48,6 +50,10 @@ const HeroPage = () => {
       setUserId(userId);
     }
   };
+
+  const triggerChatHistoryReload = useSelector(
+    (state) => state.data.setReloadChatHistory
+  );
 
   // useEffect(() => {
   //   let userId = "";
@@ -93,6 +99,7 @@ const HeroPage = () => {
         const data = response?.data;
         console.log("recent chats", data.result?.recent_chats);
         setRecentChats(data.result?.recent_chats);
+        dispatch(setReloadChatHistory(false));
       } catch (error) {
         console.log(error);
         message.error(error.message);
@@ -101,10 +108,10 @@ const HeroPage = () => {
   };
 
   useEffect(() => {
-    if (userId) {
+    if (userId || triggerChatHistoryReload) {
       fetchRecentChats();
     }
-  }, [userId]);
+  }, [userId, triggerChatHistoryReload]);
 
   //check the session
 
