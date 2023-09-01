@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn, signOut, getCsrfToken } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { Button, Checkbox, Form, Input } from "antd";
 import {
   GoogleCircleFilled,
@@ -10,30 +10,46 @@ import {
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-
-const onFinish = async (values) => {
-  console.log("Success:", values);
-  result = await signIn("credentials-provider", {
-    email: values.email,
-    password: values.password,
-    redirect: false,
-    callbackUrl: "http://localhost:3000/sign-in",
-
-    csrfToken: getCsrfToken(),
-  });
-  await signIn("credentials-provider", {
-    email: values.email,
-    password: values.password,
-    redirect: false,
-    callbackUrl: "http://localhost:3000/sign-in",
-  });
-};
-const onFinishFailed = (errorInfo) => {
-  console.log("Failed:", errorInfo);
-};
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const page = () => {
-  const csrfToken = getCsrfToken();
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const onFinish = async (values) => {
+    console.log("Success:", values);
+    setLoading(true);
+    const result = await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+      callbackUrl: "/",
+    });
+    setResult(result);
+    setLoading(false);
+  };
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+
+  useEffect(() => {
+    if (result) {
+      console.log("result", result);
+      if (result.status === 200) {
+        router.push("/");
+      }
+    }
+  }, [result]);
+
+  useEffect(() => {
+    if (session?.provider === "google") {
+      console.log("session", session?.provider);
+      router.push("/");
+    }
+  }, [session]);
+
   return (
     <div
       style={{
@@ -56,8 +72,6 @@ const page = () => {
         >
           <div>
             <Form
-              action={"/api/auth/callback/credentials"}
-              method="post"
               name="basic"
               labelCol={{
                 span: 4,
@@ -112,15 +126,13 @@ const page = () => {
                 <Checkbox>Remember me</Checkbox>
               </Form.Item>
 
-              <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-
               <Form.Item
                 wrapperCol={{
                   offset: 11,
                   span: 13,
                 }}
               >
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" loading={loading}>
                   Submit
                 </Button>
               </Form.Item>

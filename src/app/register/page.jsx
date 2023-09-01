@@ -1,7 +1,7 @@
 "use client";
 
 import { signIn, signOut } from "next-auth/react";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Alert, Button, Checkbox, Form, Input, message } from "antd";
 import {
   GoogleCircleFilled,
   FacebookFilled,
@@ -10,15 +10,53 @@ import {
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-
-const onFinish = (values) => {
-  console.log("Success:", values);
-};
-const onFinishFailed = (errorInfo) => {
-  console.log("Failed:", errorInfo);
-};
+import axios from "axios";
+import FormData from "form-data";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const page = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  const base_url = process.env.NEXT_PUBLIC_API_BASS_URL;
+
+  const onFinish = async (values) => {
+    setLoading(true);
+    const name = values.name;
+    const email = values.email;
+    const password = values.password;
+
+    let formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
+
+    try {
+      const respond = await axios.post(
+        `${base_url}/api/v1/user/signup`,
+        formData
+      );
+      console.log(respond);
+      if (respond.data.code === "200") {
+        console.log("success : ", respond.data.message);
+        message.success(respond.data.message);
+        router.push("/sign-in");
+      } else {
+        console.log("error : ", respond.data.message);
+        message.error(respond.data.message);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      message.error(error);
+      setLoading(false);
+    }
+  };
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+
   return (
     <div
       style={{
@@ -60,7 +98,7 @@ const page = () => {
             >
               <Form.Item
                 label="Name"
-                name="username"
+                name="name"
                 rules={[
                   {
                     required: true,
@@ -103,7 +141,7 @@ const page = () => {
                   span: 13,
                 }}
               >
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" loading={loading}>
                   Register
                 </Button>
               </Form.Item>

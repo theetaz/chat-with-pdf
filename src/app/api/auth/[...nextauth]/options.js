@@ -40,14 +40,15 @@ export const options = {
           const response = await axios.post(url, data);
           const user = response;
           console.log("user : ", user.data.result);
-          if (user) {
-            return user;
-          } else {
-            return null;
-          }
+          // if (user) {
+          //   return user;
+          // } else {
+          //   return null;
+          // }
+          return user.data.result;
         } catch (error) {
           console.log(error);
-          return null;
+          return error.response.data;
         }
       },
     }),
@@ -74,6 +75,20 @@ export const options = {
     async jwt({ token, user, account, profile, isNewUser }) {
       // add a access_token to the token right after signin
 
+      //credential provider settings
+      if (account?.provider === "credentials") {
+        console.log("inside jwt callback : ", user);
+
+        const { access_token, refresh_token } = user;
+        token.accessToken = access_token;
+        token.refreshToken = refresh_token;
+
+        console.log("access token : ", token.accessToken);
+
+       
+      }
+
+      //google provider settings
       if (account?.provider === "google") {
         const { id_token } = account;
 
@@ -100,33 +115,32 @@ export const options = {
           console.log(error);
           token.accessToken = error;
         }
+       
       }
 
-      if (account?.provider === "credentials") {
-        console.log("credentials provider");
-      }
+      //get new access token from refresh token
 
-      if (isTokenExpired(token.accessToken)) {
-        const refreshToken = token.refreshToken;
-        const url = `${base_url}/api/v1/user/refresh_token`;
+       if (isTokenExpired(token.accessToken)) {
+         const refreshToken = token.refreshToken;
+         const url = `${base_url}/api/v1/user/refresh_token`;
 
-        try {
-          console.log("passing header", `Bearer ${refreshToken}`);
+         try {
+           console.log("passing header", `Bearer ${refreshToken}`);
 
-          const respose = await axios.post(url, null, {
-            headers: {
-              Authorization: `Bearer ${refreshToken}`,
-            },
-          });
+           const respose = await axios.post(url, null, {
+             headers: {
+               Authorization: `Bearer ${refreshToken}`,
+             },
+           });
 
-          console.log("new access token : ", respose.data.result.access_token);
-          const accessToken = respose.data.result.access_token;
-          token.accessToken = accessToken;
-        } catch (error) {
-          console.log(error);
-          token.accessToken = null;
-        }
-      }
+           console.log("new access token : ", respose.data.result.access_token);
+           const accessToken = respose.data.result.access_token;
+           token.accessToken = accessToken;
+         } catch (error) {
+           console.log(error);
+           token.accessToken = null;
+         }
+       }
 
       return { ...token, ...user, ...account, ...profile };
     },

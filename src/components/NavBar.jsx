@@ -35,7 +35,7 @@ const NavBar = () => {
 
   useEffect(() => {
     if (session) {
-      console.log(session);
+      console.log("navbar " ,session);
     }
   }, [session]);
 

@@ -21,6 +21,8 @@ import { BsChatLeftQuote } from "react-icons/bs";
 import { AiOutlineLock } from "react-icons/ai";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import APIClient from "@/lib/axiosInterceptor";
+import jwt from "jsonwebtoken";
 
 const HeroPage = () => {
   const router = useRouter();
@@ -34,40 +36,67 @@ const HeroPage = () => {
   useEffect(() => {
     console.log("session", session);
     console.log("status", status);
+    getUserId();
   }, [session, status]);
 
-  useEffect(() => {
+  const getUserId = () => {
     let userId = "";
-
-    if (typeof window !== "undefined") {
-      // Check if the unique ID exists in local storage
-      if (localStorage.getItem("userId")) {
-        // If it exists, retrieve the unique ID
-        userId = localStorage.getItem("userId");
-        setUserId(userId);
-      } else {
-        // If it doesn't exist, generate a new unique ID
-        userId = uuidv4();
-        // Store the unique ID in local storage
-        localStorage.setItem("userId", userId);
-        setUserId(userId);
-      }
+    if (session) {
+      const decoded = jwt.decode(session.accessToken);
+      console.log("decoded :", decoded.userid);
+      userId = decoded.userid;
+      setUserId(userId);
     }
-  }, []);
+  };
+
+  // useEffect(() => {
+  //   let userId = "";
+
+  //   if (typeof window !== "undefined") {
+  //     // Check if the unique ID exists in local storage
+  //     if (localStorage.getItem("userId")) {
+  //       // If it exists, retrieve the unique ID
+  //       userId = localStorage.getItem("userId");
+  //       setUserId(userId);
+  //     } else {
+  //       // If it doesn't exist, generate a new unique ID
+  //       userId = uuidv4();
+  //       // Store the unique ID in local storage
+  //       localStorage.setItem("userId", userId);
+  //       setUserId(userId);
+  //     }
+  //   }
+  // }, []);
 
   //fetch recent chats from backend
 
-  const fetchRecentChats = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASS_URL}/api/v1/chatdoc/recent_chat?userid=${userId}`
-      );
-      const data = await response.json();
+  // const fetchRecentChats = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       `${process.env.NEXT_PUBLIC_API_BASS_URL}/api/v1/chatdoc/recent_chat?userid=${userId}`
+  //     );
+  //     const data = await response.json();
 
-      setRecentChats(data.result?.recent_chats);
-    } catch (error) {
-      console.log(error);
-      message.error(error.message);
+  //     setRecentChats(data.result?.recent_chats);
+  //   } catch (error) {
+  //     console.log(error);
+  //     message.error(error.message);
+  //   }
+  // };
+
+  const fetchRecentChats = async () => {
+    if (session) {
+      try {
+        const response = await APIClient.get(
+          `/api/v1/chatdoc/recent_chat?userid=${userId}`
+        );
+        const data = response?.data;
+        console.log("recent chats", data.result?.recent_chats);
+        setRecentChats(data.result?.recent_chats);
+      } catch (error) {
+        console.log(error);
+        message.error(error.message);
+      }
     }
   };
 
