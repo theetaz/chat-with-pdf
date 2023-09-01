@@ -13,35 +13,60 @@ import Uploader from "@/components/Uploader";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
+import { useSession } from "next-auth/react";
+import jwt from "jsonwebtoken";
+import APIClient from "@/lib/axiosInterceptor";
 
 const { Sider, Content } = Layout;
 
 export default function ChatLayout({ children }) {
+  const { data: session } = useSession();
   const router = useRouter();
   const [userId, setUserId] = useState(null);
   const [recentChats, setRecentChats] = useState(null);
   const [selectedKey, setSelectedKey] = useState(null);
 
-  //get user id from local storage
-  useEffect(() => {
+  const getUserId = () => {
     let userId = "";
-    if (typeof window !== "undefined") {
-      // Check if the unique ID exists in local storage
-      if (localStorage.getItem("userId")) {
-        // If it exists, retrieve the unique ID
-        userId = localStorage.getItem("userId");
-        setUserId(userId);
-      }
+    if (session) {
+      const decoded = jwt.decode(session.accessToken);
+      console.log("decoded :", decoded.userid);
+      userId = decoded.userid;
+      setUserId(userId);
     }
-  }, []);
+  };
+
+  useEffect(() => {
+    getUserId();
+  }, [session]);
+
+  //push to sign in if session is null
+  useEffect(() => {
+    if (!session) {
+      router.push("/sign-in");
+    }
+  }, [session]);
+
+  // //get user id from local storage
+  // useEffect(() => {
+  //   let userId = "";
+  //   if (typeof window !== "undefined") {
+  //     // Check if the unique ID exists in local storage
+  //     if (localStorage.getItem("userId")) {
+  //       // If it exists, retrieve the unique ID
+  //       userId = localStorage.getItem("userId");
+  //       setUserId(userId);
+  //     }
+  //   }
+  // }, []);
 
   //fetch recent chats from backend
   const fetchRecentChats = async () => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASS_URL}/api/v1/chatdoc/recent_chat?userid=${userId}`
+      const response = await APIClient.get(
+        `/api/v1/chatdoc/recent_chat?userid=${userId}`
       );
-      const data = await response.json();
+      const data = response.data;
 
       setRecentChats(data.result.recent_chats);
     } catch (error) {}
@@ -113,7 +138,7 @@ export default function ChatLayout({ children }) {
             marginTop: "auto",
           }}
         >
-          <div
+          {/* <div
             style={{
               padding: "10px",
             }}
@@ -128,7 +153,7 @@ export default function ChatLayout({ children }) {
             >
               Sign in to save your chat history
             </Button>
-          </div>
+          </div> */}
           <div
             style={{
               marginTop: "10px",
