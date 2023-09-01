@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn, signOut } from "next-auth/react";
+import { signIn, signOut, getCsrfToken } from "next-auth/react";
 import { Button, Checkbox, Form, Input } from "antd";
 import {
   GoogleCircleFilled,
@@ -11,14 +11,29 @@ import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 
-const onFinish = (values) => {
+const onFinish = async (values) => {
   console.log("Success:", values);
+  result = await signIn("credentials-provider", {
+    email: values.email,
+    password: values.password,
+    redirect: false,
+    callbackUrl: "http://localhost:3000/sign-in",
+
+    csrfToken: getCsrfToken(),
+  });
+  await signIn("credentials-provider", {
+    email: values.email,
+    password: values.password,
+    redirect: false,
+    callbackUrl: "http://localhost:3000/sign-in",
+  });
 };
 const onFinishFailed = (errorInfo) => {
   console.log("Failed:", errorInfo);
 };
 
 const page = () => {
+  const csrfToken = getCsrfToken();
   return (
     <div
       style={{
@@ -41,6 +56,8 @@ const page = () => {
         >
           <div>
             <Form
+              action={"/api/auth/callback/credentials"}
+              method="post"
               name="basic"
               labelCol={{
                 span: 4,
@@ -59,12 +76,12 @@ const page = () => {
               autoComplete="off"
             >
               <Form.Item
-                label="Username"
-                name="username"
+                label="Email"
+                name="email"
                 rules={[
                   {
                     required: true,
-                    message: "Please input your username!",
+                    message: "Please input your email!",
                   },
                 ]}
               >
@@ -94,6 +111,8 @@ const page = () => {
               >
                 <Checkbox>Remember me</Checkbox>
               </Form.Item>
+
+              <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
 
               <Form.Item
                 wrapperCol={{
@@ -160,9 +179,11 @@ const page = () => {
           </div>
 
           <div className="mt-3">
-            <p style={{
+            <p
+              style={{
                 marginBottom: "0px",
-            }}> 
+              }}
+            >
               Don't have an account?{" "}
               <Link
                 href="/register"

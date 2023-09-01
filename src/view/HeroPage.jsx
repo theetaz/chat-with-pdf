@@ -10,7 +10,7 @@ import IconDiscord from "@/icons/IconDiscord";
 import IconFacebook from "@/icons/IconFacebook";
 import IconTwitterSquare from "@/icons/IconTwitterSquare";
 import { Button, message } from "antd";
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { PiStudentBold } from "react-icons/pi";
@@ -20,9 +20,11 @@ import { TfiWorld } from "react-icons/tfi";
 import { BsChatLeftQuote } from "react-icons/bs";
 import { AiOutlineLock } from "react-icons/ai";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-const HeroPage =  () => {
-  const { data: session , status } = useSession();
+const HeroPage = () => {
+  const router = useRouter();
+  const { data: session, status } = useSession();
 
   const [userId, setUserId] = useState(null);
   const [recentChats, setRecentChats] = useState([]);
@@ -32,7 +34,7 @@ const HeroPage =  () => {
   useEffect(() => {
     console.log("session", session);
     console.log("status", status);
-  }, [session , status]);
+  }, [session, status]);
 
   useEffect(() => {
     let userId = "";
@@ -74,6 +76,14 @@ const HeroPage =  () => {
       fetchRecentChats();
     }
   }, [userId]);
+
+  //check the session
+
+  useEffect(() => {
+    if (session === null) {
+      router.push("/sign-in");
+    }
+  }, [session]);
 
   return (
     <>

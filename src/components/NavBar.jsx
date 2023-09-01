@@ -6,7 +6,9 @@ import { MenuOutlined, CloseSquareOutlined } from "@ant-design/icons";
 import { useState, useEffect, useRef } from "react";
 import { useSession, signOut } from "next-auth/react";
 
+
 const NavBar = () => {
+ 
   const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -28,6 +30,22 @@ const NavBar = () => {
       };
     }
   }, [isMenuOpen]);
+
+  //session console log
+
+  useEffect(() => {
+    if (session) {
+      console.log(session);
+    }
+  }, [session]);
+
+  //sign out if session.accessToken is null
+  useEffect(() => {
+    if (session?.accessToken === null) {
+      
+      signOut();
+    }
+  }, [session]);
 
   return (
     <>
@@ -87,7 +105,7 @@ const NavBar = () => {
           </Link>
         </div>
         <div className="d-flex align-items-center">
-          {session?.user ? (
+          {session?.accessToken ? (
             <>
               <Button
                 className="text-decoration-none text-black me-3"
@@ -100,6 +118,45 @@ const NavBar = () => {
               >
                 Sign Out
               </Button>
+              {session?.provider === "github" && (
+                <div>
+                  <img
+                    src={session?.user?.image}
+                    alt=""
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </div>
+              )}
+              {session?.provider === "google" && (
+                <div>
+                  <img
+                    src={session?.user?.image}
+                    alt=""
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </div>
+              )}
+              {session?.provider === "facebook" && (
+                <div>
+                  <img
+                    src={session?.image}
+                    alt=""
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </div>
+              )}
             </>
           ) : (
             <>
@@ -116,17 +173,19 @@ const NavBar = () => {
               </Link>
             </>
           )}
-          <Button
-            style={{
-              width: "100%",
-              background: "transparent",
-              border: "1px solid #bccadf",
-              color: "#000000",
-            }}
-            type="primary"
-          >
-            Get started
-          </Button>
+          {!session?.accessToken && (
+            <Button
+              style={{
+                width: "100%",
+                background: "transparent",
+                border: "1px solid #bccadf",
+                color: "#000000",
+              }}
+              type="primary"
+            >
+              Get started
+            </Button>
+          )}
         </div>
       </div>
 

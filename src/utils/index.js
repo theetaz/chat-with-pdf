@@ -1,4 +1,6 @@
 import dayjs from "dayjs";
+import jwt from "jsonwebtoken";
+
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 dayjs().format();
@@ -43,4 +45,27 @@ const calculateTheTime = (date) => {
   }
 };
 
-export { truncateText, calculateTheTime, truncateTitle };
+//check token is expired or soon to expire
+
+const isTokenExpired = (token) => {
+  // offset by 60 seconds, so we will check if the token is "almost expired".
+  const currentTime = Math.round(Date.now() / 1000 + 60);
+  const decoded = jwt.decode(token);
+
+  if (decoded["exp"]) {
+    const adjustedExpiry = decoded["exp"];
+
+    if (adjustedExpiry < currentTime) {
+      console.log("Token expired");
+      return true;
+    }
+
+    console.log("Token has not expired yet");
+    return false;
+  }
+
+  console.log('Token["exp"] does not exist');
+  return true;
+};
+
+export { truncateText, calculateTheTime, truncateTitle, isTokenExpired };

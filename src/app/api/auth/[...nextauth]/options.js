@@ -2,6 +2,11 @@ import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import FaceBookProvider from "next-auth/providers/facebook";
 import CredentialsProvider from "next-auth/providers/credentials";
+import axios from "axios";
+import FormData from "form-data";
+import { isTokenExpired } from "@/utils";
+
+const base_url = process.env.NEXT_PUBLIC_API_BASS_URL;
 
 export const options = {
   providers: [
@@ -18,45 +23,109 @@ export const options = {
       clientSecret: process.env.FACEBOOK_SECRET,
     }),
     CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        username: {
-          label: "Username",
-          type: "email",
-          placeholder: "Your Email",
-        },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials, req) {
-        const res = await fetch("/your/endpoint", {
-          method: "POST",
-          body: JSON.stringify(credentials),
-          headers: { "Content-Type": "application/json" },
-        });
-        const user = await res.json();
+      name: "credentials",
 
-        // If no error and we have user data, return it
-        if (res.ok && user) {
-          return user;
+      async authorize(credentials) {
+        const { email, password } = credentials;
+        console.log("inside credentials provider : ", email, password);
+
+        const url = `${base_url}/api/v1/user/signin`;
+        let data = new FormData();
+        data.append("email", email);
+        data.append("password", password);
+
+        console.log(data);
+
+        try {
+          const response = await axios.post(url, data);
+          const user = response;
+          console.log("user : ", user.data.result);
+          if (user) {
+            return user;
+          } else {
+            return null;
+          }
+        } catch (error) {
+          console.log(error);
+          return null;
         }
-        // Return null if user data could not be retrieved
-        return null;
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/sign-in",
   },
   callbacks: {
-    async signIn({ user, account, profile }) {
-      return user;
+    async signIn({ user, account, profile, credentials }) {
+      console.log(
+        "inside signIn callback cred : ",
+        user,
+        account,
+        profile,
+        credentials
+      );
+      return true;
     },
+
     async jwt({ token, user, account, profile, isNewUser }) {
       // add a access_token to the token right after signin
 
-      if (user) {
-        token.accessToken = "123456789";
+      if (account?.provider === "google") {
+        const { id_token } = account;
+
+        const url = `${base_url}/api/v1/user/social_auth`;
+        let data = new FormData();
+        data.append("id_token", id_token);
+
+        try {
+          //post idToken to backend
+          const response = await axios.post(url, data);
+          console.log(
+            "access token response : ",
+            response.data.result.access_token
+          );
+          const accessToken = response.data.result.access_token;
+          token.accessToken = accessToken;
+          console.log(
+            "refresh token response : ",
+            response.data.result.refresh_token
+          );
+          const refreshToken = response.data.result.refresh_token;
+          token.refreshToken = refreshToken;
+        } catch (error) {
+          console.log(error);
+          token.accessToken = error;
+        }
+      }
+
+      if (account?.provider === "credentials") {
+        console.log("credentials provider");
+      }
+
+      if (isTokenExpired(token.accessToken)) {
+        const refreshToken = token.refreshToken;
+        const url = `${base_url}/api/v1/user/refresh_token`;
+
+        try {
+          console.log("passing header", `Bearer ${refreshToken}`);
+
+          const respose = await axios.post(url, null, {
+            headers: {
+              Authorization: `Bearer ${refreshToken}`,
+            },
+          });
+
+          console.log("new access token : ", respose.data.result.access_token);
+          const accessToken = respose.data.result.access_token;
+          token.accessToken = accessToken;
+        } catch (error) {
+          console.log(error);
+          token.accessToken = null;
+        }
       }
 
       return { ...token, ...user, ...account, ...profile };
