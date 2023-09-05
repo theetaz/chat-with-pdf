@@ -2,6 +2,7 @@
 
 import { Button, Card, List } from "antd";
 import { Footer } from "antd/es/layout/layout";
+import StripeCheckoutButton from "./StripeCheckoutButton";
 const PricingCard = (props) => (
   <Card
     title={props.title}
@@ -38,7 +39,7 @@ const PricingCard = (props) => (
           justifyContent: "center",
         }}
       >
-        <Button type="primary">Get Plus</Button>
+        <StripeCheckoutButton />
       </div>
     </Footer>
   </Card>

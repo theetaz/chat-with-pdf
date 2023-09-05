@@ -33,11 +33,11 @@ const NavBar = () => {
 
   //session console log
 
-  useEffect(() => {
-    if (session) {
-      console.log("navbar " ,session);
-    }
-  }, [session]);
+  // useEffect(() => {
+  //   if (session) {
+  //     console.log("navbar " ,session);
+  //   }
+  // }, [session]);
 
   //sign out if session.accessToken is null
   useEffect(() => {
