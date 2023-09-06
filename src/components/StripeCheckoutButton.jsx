@@ -1,8 +1,27 @@
 "use client";
 import { Button } from "antd";
 import axios from "axios";
+import { useSession } from "next-auth/react";
+import jwt from "jsonwebtoken";
+import { useEffect } from "react";
+import { useState } from "react";
 
 const StripeCheckoutButton = () => {
+  const [userId, setUserId] = useState(null);
+
+  const { data: session } = useSession();
+  console.log("checkout :", session?.accessToken);
+
+  //decode jwt and get userId
+
+  useEffect(() => {
+    if (session?.accessToken) {
+      const decoded = jwt.decode(session?.accessToken);
+      console.log("decoded :", decoded.userid);
+      setUserId(decoded.userid);
+    }
+  }, [session]);
+
   const handleCheckout = async () => {
     console.log("handleCheckout");
 
@@ -10,6 +29,7 @@ const StripeCheckoutButton = () => {
       "/api/payment",
       {
         priceId: "price_1Nmu3eDroRPwlsvPtnLDptMx",
+        userId: userId,
       },
       {
         headers: {
