@@ -28,7 +28,7 @@ const StripeCheckoutButton = () => {
     const { data } = await axios.post(
       "/api/payment",
       {
-        priceId: "price_1Nmu3eDroRPwlsvPtnLDptMx",
+        priceId: "price_1NnHKbDroRPwlsvPkmbly8oS",
         userId: userId,
       },
       {

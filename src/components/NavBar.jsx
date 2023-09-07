@@ -1,17 +1,72 @@
 "use client";
 
-import { Button } from "antd";
+import { Button, Dropdown } from "antd";
 import Link from "next/link";
 import { MenuOutlined, CloseSquareOutlined } from "@ant-design/icons";
 import { useState, useEffect, useRef } from "react";
 import { useSession, signOut } from "next-auth/react";
-
+import { Modal, Input } from "antd";
 
 const NavBar = () => {
- 
   const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const menuRef = useRef(null);
+
+  //reset password func
+  const handleReset = () => {};
+
+  //modal func
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const items = [
+    {
+      key: "1",
+      label: (
+        <p
+          className="text-decoration-none d-flex justify-content-center"
+          onClick={showModal}
+          style={{
+            margin: "0px",
+          }}
+        >
+          Profile
+        </p>
+      ),
+    },
+    {
+      key: "2",
+      label: (
+        <Link href="/transactions" className="text-decoration-none">
+          Transactions
+        </Link>
+      ),
+    },
+    {
+      key: "3",
+      label: (
+        <Button
+          className="text-decoration-none text-black d-flex justify-content-center"
+          onClick={() => signOut()}
+          style={{
+            fontSize: "14px",
+            fontWeight: "400",
+            lineHeight: "20px",
+          }}
+        >
+          Sign Out
+        </Button>
+      ),
+    },
+  ];
 
   // Effect to add event listener when the menu is open
   useEffect(() => {
@@ -42,7 +97,6 @@ const NavBar = () => {
   //sign out if session.accessToken is null
   useEffect(() => {
     if (session?.accessToken === null) {
-      
       signOut();
     }
   }, [session]);
@@ -104,59 +158,86 @@ const NavBar = () => {
             About
           </Link>
         </div>
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center position-relative">
           {session?.accessToken ? (
             <>
-              <Button
-                className="text-decoration-none text-black me-3"
-                onClick={() => signOut()}
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "400",
-                  lineHeight: "20px",
+              {/* profile section */}
+              <Dropdown
+                menu={{
+                  items,
                 }}
+                placement="bottom"
+                className="dropdown-profile"
               >
-                Sign Out
-              </Button>
-              {session?.provider === "github" && (
                 <div>
-                  <img
-                    src={session?.user?.image}
-                    alt=""
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "50%",
-                    }}
-                  />
+                  {session?.provider === "github" && (
+                    <div>
+                      <img
+                        src={session?.user?.image}
+                        alt=""
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </div>
+                  )}
+                  {session?.provider === "google" && (
+                    <div>
+                      <img
+                        src={session?.user?.image}
+                        alt=""
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </div>
+                  )}
+                  {session?.provider === "facebook" && (
+                    <div>
+                      <img
+                        src={session?.image}
+                        alt=""
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </div>
+                  )}
+                  {session?.provider === "credentials" && (
+                    <div>
+                      <img
+                        src={"/user_image.png"}
+                        alt="user image"
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
-              )}
-              {session?.provider === "google" && (
-                <div>
-                  <img
-                    src={session?.user?.image}
-                    alt=""
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "50%",
-                    }}
-                  />
-                </div>
-              )}
-              {session?.provider === "facebook" && (
-                <div>
-                  <img
-                    src={session?.image}
-                    alt=""
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "50%",
-                    }}
-                  />
-                </div>
-              )}
+              </Dropdown>
+              <div className="profile-batch">
+                <span
+                  className="position-absolute "
+                  style={{
+                    background: "#fff",
+                    padding: "2px 5px",
+                    borderRadius: "8px",
+                    left: "40px",
+                    fontSize: "12px",
+                  }}
+                >
+                  Free
+                </span>
+              </div>
             </>
           ) : (
             <>
@@ -267,6 +348,49 @@ const NavBar = () => {
           </div>
         )}
       </div>
+
+      {/* profile model */}
+      <Modal
+        title="Profile"
+        footer={null}
+        onCancel={handleCancel}
+        open={isModalOpen}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            margin: "5px",
+          }}
+        >
+          <div>Name</div>
+          <div>Kusal Kalinga</div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            margin: "5px",
+          }}
+        >
+          <div>Email</div>
+          <div>kusalkalinga@gmail.com</div>
+        </div>
+
+        <div>
+          <Input placeholder="reset password" type="password" />
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            margin: "10px",
+          }}
+        >
+          <Button onClick={handleReset}>Reset Password</Button>
+        </div>
+      </Modal>
     </>
   );
 };

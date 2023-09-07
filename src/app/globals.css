@@ -63,7 +63,7 @@ body {
   height: 150px;
 }
 
-.uploader-container .ant-upload-text{
+.uploader-container .ant-upload-text {
   font-size: 18px;
   font-weight: 500;
 }
@@ -126,7 +126,7 @@ body {
 .sider-uploader .ant-upload-list.ant-upload-list-text {
   display: none !important;
 }
-.mobile-nav-menu{
+.mobile-nav-menu {
   position: absolute;
   top: 0;
   left: 0;
@@ -139,11 +139,19 @@ body {
   border-radius: 10px;
 }
 
-.Free-footer{
+.Free-footer {
   display: none !important;
 }
 
 /* spinner */
-.ant-spin-dot-item{
+.ant-spin-dot-item {
   background-color: #000 !important;
+}
+
+/* profile-dropdown */
+
+.ant-dropdown-placement-bottom .ant-dropdown-menu-title-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
