@@ -10,7 +10,7 @@ export async function POST(request) {
 
   const session = await stripe.billingPortal.sessions.create({
     customer: customerId,
-    return_url: "http://localhost:3000/transactions",
+    return_url: "https://chat-with-pdf-ten.vercel.app/transactions",
   });
 
   console.log("PORTAL", session);
