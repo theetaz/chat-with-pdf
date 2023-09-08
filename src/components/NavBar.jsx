@@ -1,17 +1,91 @@
 "use client";
 
-import { Button } from "antd";
+import { Button, Dropdown } from "antd";
 import Link from "next/link";
 import { MenuOutlined, CloseSquareOutlined } from "@ant-design/icons";
 import { useState, useEffect, useRef } from "react";
 import { useSession, signOut } from "next-auth/react";
-
+import { Modal, Input } from "antd";
+import APIClient from "@/lib/axiosInterceptor";
+import jwt from "jsonwebtoken";
 
 const NavBar = () => {
- 
   const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [userProfileInfo, setUserProfileInfo] = useState(null);
+
   const menuRef = useRef(null);
+
+  //reset password func
+  const handleReset = () => {};
+
+  //modal func
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const items = [
+    {
+      key: "1",
+      label: (
+        <p
+          className="text-decoration-none d-flex justify-content-center"
+          onClick={showModal}
+          style={{
+            margin: "0px",
+          }}
+        >
+          Profile
+        </p>
+      ),
+    },
+    {
+      key: "2",
+      label: (
+        <Link href="/transactions" className="text-decoration-none">
+          Transactions
+        </Link>
+      ),
+    },
+    {
+      key: "3",
+      label: (
+        <Button
+          className="text-decoration-none text-black d-flex justify-content-center"
+          onClick={() => signOut()}
+          style={{
+            fontSize: "14px",
+            fontWeight: "400",
+            lineHeight: "20px",
+          }}
+        >
+          Sign Out
+        </Button>
+      ),
+    },
+  ];
+
+  // get user id
+  const getUserId = () => {
+    let userId = "";
+    if (session) {
+      const decoded = jwt.decode(session.accessToken);
+      console.log("decoded :", decoded.userid);
+      userId = decoded.userid;
+      setUserId(userId);
+    }
+  };
+
+  useEffect(() => {
+    getUserId();
+  }, [session]);
 
   // Effect to add event listener when the menu is open
   useEffect(() => {
@@ -31,21 +105,33 @@ const NavBar = () => {
     }
   }, [isMenuOpen]);
 
-  //session console log
-
-  // useEffect(() => {
-  //   if (session) {
-  //     console.log("navbar " ,session);
-  //   }
-  // }, [session]);
-
-  //sign out if session.accessToken is null
+  //sign off
   useEffect(() => {
     if (session?.accessToken === null) {
-      
       signOut();
     }
   }, [session]);
+
+  //fetch profile
+
+  const fetchProfile = async () => {
+    try {
+      const response = await APIClient.get(
+        `api/v1/user/profile?userid=${userId}`
+      );
+      const data = response.data;
+      console.log(data);
+      setUserProfileInfo(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (userId) {
+      fetchProfile();
+    }
+  }, [userId, session]);
 
   return (
     <>
@@ -97,66 +183,93 @@ const NavBar = () => {
           >
             Pricing
           </Link>
-          <Link href="/" className="text-decoration-none text-black me-5">
+          <Link href="/faq" className="text-decoration-none text-black me-5">
             FAQ
           </Link>
           <Link href="/" className="text-decoration-none text-black me-5">
             About
           </Link>
         </div>
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center position-relative">
           {session?.accessToken ? (
             <>
-              <Button
-                className="text-decoration-none text-black me-3"
-                onClick={() => signOut()}
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "400",
-                  lineHeight: "20px",
+              {/* profile section */}
+              <Dropdown
+                menu={{
+                  items,
                 }}
+                placement="bottom"
+                className="dropdown-profile"
               >
-                Sign Out
-              </Button>
-              {session?.provider === "github" && (
                 <div>
-                  <img
-                    src={session?.user?.image}
-                    alt=""
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "50%",
-                    }}
-                  />
+                  {session?.provider === "github" && (
+                    <div>
+                      <img
+                        src={session?.user?.image}
+                        alt=""
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </div>
+                  )}
+                  {session?.provider === "google" && (
+                    <div>
+                      <img
+                        src={session?.user?.image}
+                        alt=""
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </div>
+                  )}
+                  {session?.provider === "facebook" && (
+                    <div>
+                      <img
+                        src={session?.image}
+                        alt=""
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </div>
+                  )}
+                  {session?.provider === "credentials" && (
+                    <div>
+                      <img
+                        src={"/user_image.png"}
+                        alt="user image"
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
-              )}
-              {session?.provider === "google" && (
-                <div>
-                  <img
-                    src={session?.user?.image}
-                    alt=""
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "50%",
-                    }}
-                  />
-                </div>
-              )}
-              {session?.provider === "facebook" && (
-                <div>
-                  <img
-                    src={session?.image}
-                    alt=""
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "50%",
-                    }}
-                  />
-                </div>
-              )}
+              </Dropdown>
+              <div className="profile-batch">
+                <span
+                  className="position-absolute "
+                  style={{
+                    background: "#fff",
+                    padding: "2px 5px",
+                    borderRadius: "8px",
+                    left: "40px",
+                    fontSize: "12px",
+                  }}
+                >
+                  {userProfileInfo?.subscription_tier}
+                </span>
+              </div>
             </>
           ) : (
             <>
@@ -267,6 +380,47 @@ const NavBar = () => {
           </div>
         )}
       </div>
+
+      {/* profile model */}
+      <Modal
+        title="Profile"
+        footer={null}
+        onCancel={handleCancel}
+        open={isModalOpen}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            margin: "5px",
+          }}
+        >
+          <div>Name</div>
+          <div>{userProfileInfo?.name}</div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            margin: "5px",
+          }}
+        >
+          <div>Email</div>
+          <div>{userProfileInfo?.email}</div>
+        </div>
+
+       
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            margin: "10px",
+          }}
+        >
+          <Button onClick={handleReset}>Reset Password</Button>
+        </div>
+      </Modal>
     </>
   );
 };

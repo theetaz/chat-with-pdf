@@ -15,9 +15,13 @@ export async function POST(request) {
       },
     ],
     client_reference_id: userId,
-    mode: "payment",
-    success_url: "https://chat-with-pdf-ten.vercel.app/",
-    cancel_url: "https://chat-with-pdf-ten.vercel.app/pricing",
+    mode: "subscription",
+    billing_address_collection: "required",
+    success_url: "http://localhost:3000",
+    cancel_url: "http://localhost:3000/pricing",
+    metadata: {
+      userId: userId,
+    },
   });
 
   return NextResponse.json(session.url);
