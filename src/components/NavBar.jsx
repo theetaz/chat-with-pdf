@@ -6,11 +6,15 @@ import { MenuOutlined, CloseSquareOutlined } from "@ant-design/icons";
 import { useState, useEffect, useRef } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { Modal, Input } from "antd";
+import APIClient from "@/lib/axiosInterceptor";
+import jwt from "jsonwebtoken";
 
 const NavBar = () => {
   const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [userProfileInfo, setUserProfileInfo] = useState(null);
 
   const menuRef = useRef(null);
 
@@ -22,7 +26,7 @@ const NavBar = () => {
   const showModal = () => {
     setIsModalOpen(true);
   };
-  
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -68,6 +72,21 @@ const NavBar = () => {
     },
   ];
 
+  // get user id
+  const getUserId = () => {
+    let userId = "";
+    if (session) {
+      const decoded = jwt.decode(session.accessToken);
+      console.log("decoded :", decoded.userid);
+      userId = decoded.userid;
+      setUserId(userId);
+    }
+  };
+
+  useEffect(() => {
+    getUserId();
+  }, [session]);
+
   // Effect to add event listener when the menu is open
   useEffect(() => {
     if (isMenuOpen) {
@@ -86,20 +105,33 @@ const NavBar = () => {
     }
   }, [isMenuOpen]);
 
-  //session console log
-
-  // useEffect(() => {
-  //   if (session) {
-  //     console.log("navbar " ,session);
-  //   }
-  // }, [session]);
-
-  //sign out if session.accessToken is null
+  //sign off
   useEffect(() => {
     if (session?.accessToken === null) {
       signOut();
     }
   }, [session]);
+
+  //fetch profile
+
+  const fetchProfile = async () => {
+    try {
+      const response = await APIClient.get(
+        `api/v1/user/profile?userid=${userId}`
+      );
+      const data = response.data;
+      console.log(data);
+      setUserProfileInfo(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (userId) {
+      fetchProfile();
+    }
+  }, [userId, session]);
 
   return (
     <>
@@ -151,7 +183,7 @@ const NavBar = () => {
           >
             Pricing
           </Link>
-          <Link href="/" className="text-decoration-none text-black me-5">
+          <Link href="/faq" className="text-decoration-none text-black me-5">
             FAQ
           </Link>
           <Link href="/" className="text-decoration-none text-black me-5">
@@ -235,7 +267,7 @@ const NavBar = () => {
                     fontSize: "12px",
                   }}
                 >
-                  Free
+                  {userProfileInfo?.subscription_tier}
                 </span>
               </div>
             </>
@@ -364,7 +396,7 @@ const NavBar = () => {
           }}
         >
           <div>Name</div>
-          <div>Kusal Kalinga</div>
+          <div>{userProfileInfo?.name}</div>
         </div>
         <div
           style={{
@@ -374,12 +406,10 @@ const NavBar = () => {
           }}
         >
           <div>Email</div>
-          <div>kusalkalinga@gmail.com</div>
+          <div>{userProfileInfo?.email}</div>
         </div>
 
-        <div>
-          <Input placeholder="reset password" type="password" />
-        </div>
+       
 
         <div
           style={{

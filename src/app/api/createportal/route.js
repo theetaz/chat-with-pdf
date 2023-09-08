@@ -6,7 +6,7 @@ export async function POST(request) {
 
   let data = await request.json();
   console.log("DATA", data);
-  let customerId = "cus_OaqnbJTioFEhSo";
+  let customerId = data?.customer_id;
 
   const session = await stripe.billingPortal.sessions.create({
     customer: customerId,

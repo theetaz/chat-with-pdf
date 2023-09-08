@@ -4,11 +4,56 @@ import { Button, Col, Row } from "antd";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useSession } from "next-auth/react";
+import APIClient from "@/lib/axiosInterceptor";
+import jwt from "jsonwebtoken";
 
 export default function Transactions() {
   const router = useRouter();
+  const { data: session } = useSession();
 
   const [urlObject, setUrlObject] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [customerId, setCustomerId] = useState(null);
+
+  //get user id
+
+  const getUserId = () => {
+    let userId = "";
+    if (session) {
+      const decoded = jwt.decode(session.accessToken);
+      console.log("decoded :", decoded.userid);
+      userId = decoded.userid;
+      setUserId(userId);
+    }
+  };
+
+  useEffect(() => {
+    getUserId();
+  }, [session]);
+
+  //get customer id
+
+  const getCustomerId = async () => {
+    try {
+      const response = await APIClient.get(
+        `/api/v1/payment/customer?userid=${userId}`
+      );
+      const data = response.data;
+      console.log("data :", data);
+      setCustomerId(data?.result?.stripe_cutomer_id);
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
+  useEffect(() => {
+    if (userId) {
+      getCustomerId();
+    }
+  }, [userId, session]);
+
+  //create portal
 
   const manageSub = async (e) => {
     e.preventDefault();
@@ -16,7 +61,7 @@ export default function Transactions() {
       const { data } = await axios.post(
         "/api/createportal",
         {
-          test: "test",
+          customer_id: customerId,
         },
         {
           headers: {
