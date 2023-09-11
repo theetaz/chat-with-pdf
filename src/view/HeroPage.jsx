@@ -20,36 +20,33 @@ import { TfiWorld } from "react-icons/tfi";
 import { BsChatLeftQuote } from "react-icons/bs";
 import { AiOutlineLock } from "react-icons/ai";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import APIClient from "@/lib/axiosInterceptor";
 import jwt from "jsonwebtoken";
 import { setReloadChatHistory } from "@/feature/dataslice";
 
 const HeroPage = () => {
   const dispatch = useDispatch();
-  const router = useRouter();
-  const { data: session, status } = useSession();
+  
+  const { data: session,  } = useSession();
 
   const [userId, setUserId] = useState(null);
   const [recentChats, setRecentChats] = useState([]);
 
   //tesing session
 
-  useEffect(() => {
-    console.log("session", session);
-    console.log("status", status);
-    getUserId();
-  }, [session, status]);
-
   const getUserId = () => {
     let userId = "";
     if (session) {
-      const decoded = jwt.decode(session.accessToken);
-      console.log("decoded :", decoded.userid);
-      userId = decoded.userid;
+      const decoded = jwt.decode(session?.accessToken);
+      console.log("decoded :", decoded?.userid);
+      userId = decoded?.userid;
       setUserId(userId);
     }
   };
+
+  useEffect(() => {
+    getUserId();
+  }, [session]);
 
   const triggerChatHistoryReload = useSelector(
     (state) => state.data.setReloadChatHistory
@@ -113,13 +110,7 @@ const HeroPage = () => {
     }
   }, [userId, triggerChatHistoryReload]);
 
-  //check the session
-
-  useEffect(() => {
-    if (session === null) {
-      router.push("/sign-in");
-    }
-  }, [session]);
+  
 
   return (
     <>

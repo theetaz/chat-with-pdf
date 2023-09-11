@@ -41,11 +41,11 @@ export default function ChatLayout({ children }) {
   }, [session]);
 
   //push to sign in if session is null
-  useEffect(() => {
-    if (!session) {
-      router.push("/sign-in");
-    }
-  }, [session]);
+  // useEffect(() => {
+  //   if (!session) {
+  //     router.push("/sign-in");
+  //   }
+  // }, [session]);
 
   // //get user id from local storage
   // useEffect(() => {

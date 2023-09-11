@@ -7,6 +7,8 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import APIClient from "@/lib/axiosInterceptor";
 import jwt from "jsonwebtoken";
+import { calculateRemainDates } from "@/utils";
+import Loader from "@/components/Loader";
 
 export default function Transactions() {
   const router = useRouter();
@@ -15,6 +17,10 @@ export default function Transactions() {
   const [urlObject, setUrlObject] = useState(null);
   const [userId, setUserId] = useState(null);
   const [customerId, setCustomerId] = useState(null);
+  const [userProfileInfo, setUserProfileInfo] = useState(null);
+  const [fetchProfileInfoLoading, setFetchProfileInfoLoading] = useState(false);
+  const [userUsage, setUserUsage] = useState(null);
+  const [userUsageLoading, setUserUsageLoading] = useState(false);
 
   //get user id
 
@@ -86,6 +92,54 @@ export default function Transactions() {
     }
   }, [urlObject]);
 
+  //fetch user tier data
+
+  const fetchProfile = async () => {
+    setFetchProfileInfoLoading(true);
+    try {
+      const response = await APIClient.get(
+        `api/v1/user/profile?userid=${userId}`
+      );
+      const data = response.data;
+      console.log(data);
+      setUserProfileInfo(data.result);
+      setFetchProfileInfoLoading(false);
+    } catch (error) {
+      console.log(error);
+      setFetchProfileInfoLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (userId) {
+      fetchProfile();
+    }
+  }, [userId, session]);
+
+  //get user usage data
+
+  const getUserUsage = async () => {
+    setUserUsageLoading(true);
+    try {
+      const responsible = await APIClient.get(
+        `api/v1/user/usage?userid=${userId}`
+      );
+      const data = responsible.data;
+      console.log("data :", data);
+      setUserUsage(data.result);
+      setUserUsageLoading(false);
+    } catch (error) {
+      console.log("error :", error);
+      setUserUsageLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (userId) {
+      getUserUsage();
+    }
+  }, [userId]);
+
   return (
     <>
       <div
@@ -111,49 +165,73 @@ export default function Transactions() {
                 marginBottom: "10px",
               }}
             >
-              Free
+              {userProfileInfo?.subscription_tier}
             </p>
           </div>
-          <div>
-            <Button onClick={manageSub}>Manage Subscription</Button>
-          </div>
+          {userProfileInfo?.subscription_tier === "plus" && (
+            <div>
+              <Button onClick={manageSub}>Manage Subscription</Button>
+            </div>
+          )}
         </div>
-        <Row>
-          <Col span={8}>
-            <p
-              style={{
-                color: "#828391",
-              }}
-            >
-              Subscribed to
-            </p>
-          </Col>
-          <Col span={8}>free</Col>
-        </Row>
-        <Row>
-          <Col span={8}>
-            <p
-              style={{
-                color: "#828391",
-              }}
-            >
-              Characters used
-            </p>
-          </Col>
-          <Col span={8}>0 / 10,000</Col>
-        </Row>
-        <Row>
-          <Col span={8}>
-            <p
-              style={{
-                color: "#828391",
-              }}
-            >
-              Next character reset in
-            </p>
-          </Col>
-          <Col span={8}>30 days</Col>
-        </Row>
+        {userUsageLoading ? (
+          <Loader />
+        ) : (
+          <>
+            <Row>
+              <Col span={8}>
+                <p
+                  style={{
+                    color: "#828391",
+                  }}
+                >
+                  Subscribed to
+                </p>
+              </Col>
+              <Col span={8}>{userProfileInfo?.subscription_tier}</Col>
+            </Row>
+            <Row>
+              <Col span={8}>
+                <p
+                  style={{
+                    color: "#828391",
+                  }}
+                >
+                  Documents used
+                </p>
+              </Col>
+              <Col
+                span={8}
+              >{`${userUsage?.used_documents} / ${userUsage?.total_documents} `}</Col>
+            </Row>
+            <Row>
+              <Col span={8}>
+                <p
+                  style={{
+                    color: "#828391",
+                  }}
+                >
+                  Questions used
+                </p>
+              </Col>
+              <Col
+                span={8}
+              >{`${userUsage?.used_questions} / ${userUsage?.total_question} `}</Col>
+            </Row>
+            <Row>
+              <Col span={8}>
+                <p
+                  style={{
+                    color: "#828391",
+                  }}
+                >
+                  Next reset in
+                </p>
+              </Col>
+              <Col span={8}>{calculateRemainDates(userUsage?.end_on)}</Col>
+            </Row>
+          </>
+        )}
       </div>
 
       <div
