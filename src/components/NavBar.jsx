@@ -359,31 +359,61 @@ const NavBar = () => {
               >
                 Pricing
               </Link>
-              <Link href="/" className="text-decoration-none text-white mt-2">
+              <Link
+                href="/faq"
+                className="text-decoration-none text-white mt-2"
+              >
                 FAQ
               </Link>
-              <Link href="/" className="text-decoration-none text-white mt-2">
-                Affliate
-              </Link>
-              <Link href="/" className="text-decoration-none text-white mt-2">
-                About
-              </Link>
+              {session?.accessToken && (
+                <>
+                  <Button
+                    onClick={showModal}
+                    className="text-decoration-none text-white mt-2 transparent-button"
+                  >
+                    Profile
+                  </Button>
+                  <Link
+                    href="/transactions"
+                    className="text-decoration-none text-white mt-2"
+                  >
+                    Transactions
+                  </Link>
+                </>
+              )}
             </div>
             <div className="d-flex justify-content-center align-items-center mt-4">
-              <Button
-                className="text-decoration-none text-white "
-                href="api/auth/signin"
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "400",
-                  lineHeight: "20px",
-                  background: "transparent",
-                  border: "1px solid #bccadf",
-                  color: "#000000",
-                }}
-              >
-                Login
-              </Button>
+              {session?.accessToken ? (
+                <Button
+                  className="text-decoration-none text-white "
+                  onClick={() => signOut()}
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "400",
+                    lineHeight: "20px",
+                    background: "transparent",
+                    border: "1px solid #bccadf",
+                    color: "#000000",
+                  }}
+                >
+                  Sign Out
+                </Button>
+              ) : (
+                <Button
+                  className="text-decoration-none text-white "
+                  href="/sign-in"
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "400",
+                    lineHeight: "20px",
+                    background: "transparent",
+                    border: "1px solid #bccadf",
+                    color: "#000000",
+                  }}
+                >
+                  Login
+                </Button>
+              )}
             </div>
           </div>
         )}

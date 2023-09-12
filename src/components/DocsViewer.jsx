@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 
+
 const DocsViewer = ({id}) => {
   const [urlFile, setUrlFile] = useState(null);
 
