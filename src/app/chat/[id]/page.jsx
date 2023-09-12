@@ -6,12 +6,16 @@ import DocsViewer from "@/components/DocsViewer";
 import OtherPdfView from "@/components/OtherPdfView";
 import PptViewer from "@/components/PptViewer";
 import { setUrlParam } from "@/feature/dataslice";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import APIClient from "@/lib/axiosInterceptor";
+import { useSession } from "next-auth/react";
 
 export default function Page({ params }) {
+  const { data: session } = useSession();
   let id = params.id;
+
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASS_URL;
 
   const dispach = useDispatch();
 
@@ -21,6 +25,38 @@ export default function Page({ params }) {
 
   const [pdfFileName, setPdfFileName] = useState(null);
   const [fileType, setFileType] = useState(null);
+  const [localUserId, setLocalUserId] = useState(null);
+  const [unregUserdata, setUnregUserdata] = useState(null);
+
+  //get access token and userId from local storage
+
+  useEffect(() => {
+    let localUserId = "";
+
+    if (typeof window !== "undefined") {
+      // Check if the unique ID exists in local storage
+      if (localStorage.getItem("localUserId")) {
+        // If it exists, retrieve the unique ID
+        localUserId = localStorage.getItem("localUserId");
+        console.log("localUserId :", localUserId);
+        setLocalUserId(localUserId);
+      }
+    }
+  });
+
+  //get access token from local storage
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      // Check if the unique ID exists in local storage
+      if (localStorage.getItem(`${localUserId}userToken`)) {
+        // If it exists, retrieve the unique ID
+        const unregUserdata = localStorage.getItem(`${localUserId}userToken`);
+        console.log(`chat page  ${localUserId}userToken`, unregUserdata);
+        setUnregUserdata(unregUserdata);
+      }
+    }
+  });
 
   //get document url from db
 
@@ -37,9 +73,49 @@ export default function Page({ params }) {
     }
   };
 
+  const fetchDocUrlUnreg = async () => {
+    try {
+      const authToken = unregUserdata;
+      console.log("fetchDocUrlUnreg", authToken);
+
+      const apiUrl = `${baseUrl}/api/v1/chatdoc/chat_history?source_id=${id}`;
+
+      const headers = new Headers({
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      });
+
+      const request = new Request(apiUrl, {
+        method: "GET",
+        headers: headers,
+      });
+
+      fetch(request)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Handle the response data
+          console.log("set pdf file name:", data);
+          setPdfFileName(data?.result?.source_url);
+        });
+    } catch (error) {
+      console.log("this err", error);
+    }
+  };
+
   useEffect(() => {
-    fetchDocUrl();
-  }, [id]);
+    if (id && session) {
+      fetchDocUrl();
+    }
+
+    if (!session && unregUserdata && id) {
+      fetchDocUrlUnreg();
+    }
+  }, [id, session, unregUserdata]);
 
   //get pdf name from local storage
   // useEffect(() => {

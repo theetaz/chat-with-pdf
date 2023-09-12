@@ -68,4 +68,33 @@ const isTokenExpired = (token) => {
   return true;
 };
 
-export { truncateText, calculateTheTime, truncateTitle, isTokenExpired };
+//calculate remain Dates
+
+const calculateRemainDates = (timestamp) => {
+  //convert created date and time to timestamp
+
+  let endTime = timestamp;
+
+  const now = dayjs().unix();
+
+  // get the difference between now and the created date
+  let diff = endTime - now;
+
+  //calculate how many days left
+
+  let days = Math.floor(diff / (3600 * 24));
+
+  if (days > 0) {
+    return days + (days > 1 ? " days left" : " day left");
+  } else {
+    return "Expired";
+  }
+};
+
+export {
+  truncateText,
+  calculateTheTime,
+  truncateTitle,
+  isTokenExpired,
+  calculateRemainDates,
+};

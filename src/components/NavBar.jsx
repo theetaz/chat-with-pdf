@@ -16,6 +16,8 @@ const NavBar = () => {
   const [userId, setUserId] = useState(null);
   const [userProfileInfo, setUserProfileInfo] = useState(null);
 
+  const [fetchProfileInfoLoading, setFetchProfileInfoLoading] = useState(false);
+
   const menuRef = useRef(null);
 
   //reset password func
@@ -115,6 +117,7 @@ const NavBar = () => {
   //fetch profile
 
   const fetchProfile = async () => {
+    setFetchProfileInfoLoading(true);
     try {
       const response = await APIClient.get(
         `api/v1/user/profile?userid=${userId}`
@@ -122,8 +125,10 @@ const NavBar = () => {
       const data = response.data;
       console.log(data);
       setUserProfileInfo(data.result);
+      setFetchProfileInfoLoading(false);
     } catch (error) {
       console.log(error);
+      setFetchProfileInfoLoading(false);
     }
   };
 
@@ -256,20 +261,23 @@ const NavBar = () => {
                   )}
                 </div>
               </Dropdown>
-              <div className="profile-batch">
-                <span
-                  className="position-absolute "
-                  style={{
-                    background: "#fff",
-                    padding: "2px 5px",
-                    borderRadius: "8px",
-                    left: "40px",
-                    fontSize: "12px",
-                  }}
-                >
-                  {userProfileInfo?.subscription_tier}
-                </span>
-              </div>
+
+              {!fetchProfileInfoLoading && userProfileInfo && (
+                <div className="profile-batch">
+                  <span
+                    className="position-absolute "
+                    style={{
+                      background: "#fff",
+                      padding: "2px 5px",
+                      borderRadius: "8px",
+                      left: "40px",
+                      fontSize: "12px",
+                    }}
+                  >
+                    {userProfileInfo?.subscription_tier}
+                  </span>
+                </div>
+              )}
             </>
           ) : (
             <>
@@ -351,31 +359,61 @@ const NavBar = () => {
               >
                 Pricing
               </Link>
-              <Link href="/" className="text-decoration-none text-white mt-2">
+              <Link
+                href="/faq"
+                className="text-decoration-none text-white mt-2"
+              >
                 FAQ
               </Link>
-              <Link href="/" className="text-decoration-none text-white mt-2">
-                Affliate
-              </Link>
-              <Link href="/" className="text-decoration-none text-white mt-2">
-                About
-              </Link>
+              {session?.accessToken && (
+                <>
+                  <Button
+                    onClick={showModal}
+                    className="text-decoration-none text-white mt-2 transparent-button"
+                  >
+                    Profile
+                  </Button>
+                  <Link
+                    href="/transactions"
+                    className="text-decoration-none text-white mt-2"
+                  >
+                    Transactions
+                  </Link>
+                </>
+              )}
             </div>
             <div className="d-flex justify-content-center align-items-center mt-4">
-              <Button
-                className="text-decoration-none text-white "
-                href="api/auth/signin"
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "400",
-                  lineHeight: "20px",
-                  background: "transparent",
-                  border: "1px solid #bccadf",
-                  color: "#000000",
-                }}
-              >
-                Login
-              </Button>
+              {session?.accessToken ? (
+                <Button
+                  className="text-decoration-none text-white "
+                  onClick={() => signOut()}
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "400",
+                    lineHeight: "20px",
+                    background: "transparent",
+                    border: "1px solid #bccadf",
+                    color: "#000000",
+                  }}
+                >
+                  Sign Out
+                </Button>
+              ) : (
+                <Button
+                  className="text-decoration-none text-white "
+                  href="/sign-in"
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "400",
+                    lineHeight: "20px",
+                    background: "transparent",
+                    border: "1px solid #bccadf",
+                    color: "#000000",
+                  }}
+                >
+                  Login
+                </Button>
+              )}
             </div>
           </div>
         )}
@@ -408,8 +446,6 @@ const NavBar = () => {
           <div>Email</div>
           <div>{userProfileInfo?.email}</div>
         </div>
-
-       
 
         <div
           style={{

@@ -5,6 +5,7 @@ import { message, Spin, Upload } from "antd";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import jwt from "jsonwebtoken";
+import axios from "axios";
 const { Dragger } = Upload;
 
 import React, { useEffect, useState } from "react";
@@ -12,6 +13,8 @@ import { useDispatch } from "react-redux";
 
 const Uploader = () => {
   const { data: session } = useSession();
+
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASS_URL;
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -22,7 +25,8 @@ const Uploader = () => {
   const [pdfName, setPdfName] = useState(null);
   const [loading, setLoading] = useState(false);
   const [accessToken, setAccessToken] = useState(null);
-
+  const [localUserId, setLocalUserId] = useState(null);
+  const [unregUserdata, setUnregUserdata] = useState(null);
 
   const getUserId = () => {
     let userId = "";
@@ -36,31 +40,62 @@ const Uploader = () => {
 
   useEffect(() => {
     getUserId();
-  },[session])
+  }, [session]);
 
+  //get user id from local storage
+  useEffect(() => {
+    let localUserId = "";
 
+    if (typeof window !== "undefined") {
+      // Check if the unique ID exists in local storage
+      if (localStorage.getItem("localUserId")) {
+        // If it exists, retrieve the unique ID
+        localUserId = localStorage.getItem("localUserId");
+        console.log("localUserId :", localUserId);
+        setLocalUserId(localUserId);
+      }
+    }
+  }, []);
 
-  // //get user id from local storage
-  // useEffect(() => {
-  //   let userId = "";
+  useEffect(() => {
+    if (!session) {
+      setUserId(localUserId);
+      console.log("uploader localUserId", localUserId);
+    }
+  }, [session, localUserId]);
 
-  //   if (typeof window !== "undefined") {
-  //     // Check if the unique ID exists in local storage
-  //     if (localStorage.getItem("userId")) {
-  //       // If it exists, retrieve the unique ID
-  //       userId = localStorage.getItem("userId");
+  //get unreg user data
+  const unregisterUser = async () => {
+    let data = new FormData();
+    data.append("userid", localUserId);
 
-  //       setUserId(userId);
-  //     }
-  //   }
-  // });
+    try {
+      const respond = axios.post(`${baseUrl}/api/v1/user/unregister`, data);
+      const result = await respond;
+      console.log("unreg result :", result?.data?.result);
+      setUnregUserdata(result?.data?.result);
+    } catch (error) {
+      console.log("unreg error :", error);
+    }
+  };
+
+  useEffect(() => {
+    if (localUserId && !session) {
+      unregisterUser();
+    }
+  }, [localUserId]);
 
   useEffect(() => {
     if (session) {
       console.log("uploader session", session);
       setAccessToken(session.accessToken);
     }
-  }, [session]);
+
+    if (!session && unregUserdata) {
+      console.log("uploader unregUserdata", unregUserdata);
+      setAccessToken(unregUserdata.access_token);
+    }
+  }, [session, unregUserdata]);
 
   const props = {
     name: "file",
