@@ -47,6 +47,22 @@ body {
   .headerButton {
     width: 70% !important;
   }
+
+  .sign-in-form,
+  .register-form {
+    width: 300px !important;
+  }
+  .sign-in-container,
+  .register-container {
+    width: 350px !important;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .sign-in-form,
+  .register-form {
+    width: 800px !important;
+  }
 }
 
 .uploader .ant-upload-drag {

@@ -20,59 +20,90 @@ import { TfiWorld } from "react-icons/tfi";
 import { BsChatLeftQuote } from "react-icons/bs";
 import { AiOutlineLock } from "react-icons/ai";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import APIClient from "@/lib/axiosInterceptor";
 import jwt from "jsonwebtoken";
 import { setReloadChatHistory } from "@/feature/dataslice";
+import FormData from "form-data";
+import axios from "axios";
 
 const HeroPage = () => {
   const dispatch = useDispatch();
-  const router = useRouter();
-  const { data: session, status } = useSession();
+
+  const { data: session } = useSession();
 
   const [userId, setUserId] = useState(null);
   const [recentChats, setRecentChats] = useState([]);
+  const [localUserId, setLocalUserId] = useState(null);
+  const [userToken, setUserToken] = useState(null);
 
-  //tesing session
-
-  useEffect(() => {
-    console.log("session", session);
-    console.log("status", status);
-    getUserId();
-  }, [session, status]);
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASS_URL;
 
   const getUserId = () => {
     let userId = "";
     if (session) {
-      const decoded = jwt.decode(session.accessToken);
-      console.log("decoded :", decoded.userid);
-      userId = decoded.userid;
+      const decoded = jwt.decode(session?.accessToken);
+      console.log("decoded :", decoded?.userid);
+      userId = decoded?.userid;
       setUserId(userId);
     }
   };
+
+  useEffect(() => {
+    getUserId();
+  }, [session]);
 
   const triggerChatHistoryReload = useSelector(
     (state) => state.data.setReloadChatHistory
   );
 
-  // useEffect(() => {
-  //   let userId = "";
+  useEffect(() => {
+    let localUserId = "";
 
-  //   if (typeof window !== "undefined") {
-  //     // Check if the unique ID exists in local storage
-  //     if (localStorage.getItem("userId")) {
-  //       // If it exists, retrieve the unique ID
-  //       userId = localStorage.getItem("userId");
-  //       setUserId(userId);
-  //     } else {
-  //       // If it doesn't exist, generate a new unique ID
-  //       userId = uuidv4();
-  //       // Store the unique ID in local storage
-  //       localStorage.setItem("userId", userId);
-  //       setUserId(userId);
-  //     }
-  //   }
-  // }, []);
+    if (typeof window !== "undefined") {
+      // Check if the unique ID exists in local storage
+      if (localStorage.getItem("localUserId")) {
+        // If it exists, retrieve the unique ID
+        localUserId = localStorage.getItem("localUserId");
+        setLocalUserId(localUserId);
+      } else {
+        // If it doesn't exist, generate a new unique ID
+        localUserId = uuidv4();
+        // Store the unique ID in local storage
+        localStorage.setItem("localUserId", localUserId);
+        setLocalUserId(localUserId);
+      }
+    }
+  }, []);
+
+  //unregister user logics
+
+  const unregisterUser = async () => {
+    let data = new FormData();
+    data.append("userid", localUserId);
+
+    try {
+      const respond = axios.post(`${baseUrl}/api/v1/user/unregister`, data);
+      const result = await respond;
+      console.log("unreg result :", result?.data?.result);
+      setUserToken(result?.data?.result?.access_token);
+    } catch (error) {
+      console.log("unreg error :", error);
+    }
+  };
+
+  useEffect(() => {
+    if (localUserId && !session) {
+      unregisterUser();
+    }
+  }, [localUserId]);
+
+  //store user id with access token in local storage
+
+  useEffect(() => {
+    if (userToken) {
+      localStorage.setItem(`${localUserId}userToken`, userToken);
+    }
+  });
 
   //fetch recent chats from backend
 
@@ -112,14 +143,6 @@ const HeroPage = () => {
       fetchRecentChats();
     }
   }, [userId, triggerChatHistoryReload]);
-
-  //check the session
-
-  useEffect(() => {
-    if (session === null) {
-      router.push("/sign-in");
-    }
-  }, [session]);
 
   return (
     <>

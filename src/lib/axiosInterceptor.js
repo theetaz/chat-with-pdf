@@ -15,6 +15,7 @@ const ApiClient = () => {
     if (session) {
       request.headers.Authorization = `Bearer ${session.accessToken}`;
     }
+    
     return request;
   });
 

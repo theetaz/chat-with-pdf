@@ -75,20 +75,29 @@ const page = () => {
           style={{
             backgroundColor: "#f6f4eb",
           }}
-          className="d-flex justify-content-center align-items-center flex-column border border-black p-5 rounded"
+          className="d-flex justify-content-center align-items-center flex-column border border-black p-5 rounded register-container"
         >
           <div>
             <Form
               name="basic"
               labelCol={{
-                span: 4,
+                sm: 6,
+                xs: 4,
+                md: 6,
+                xl: 4,
+                xxl: 6,
               }}
               wrapperCol={{
-                span: 20,
+                sm: 18,
+                xs: 20,
+                md: 18,
+                xl: 20,
+                xxl: 18,
               }}
-              style={{
-                width: 800,
-              }}
+              // style={{
+              //   width: 800,
+              // }}
+              className="register-form"
               initialValues={{
                 remember: true,
               }}
@@ -137,8 +146,26 @@ const page = () => {
 
               <Form.Item
                 wrapperCol={{
-                  offset: 11,
-                  span: 13,
+                  xs: {
+                    offset: 9,
+                    span: 15,
+                  },
+                  md: {
+                    offset: 6,
+                    span: 18,
+                  },
+                  lg: {
+                    offset: 6,
+                    span: 18,
+                  },
+                  xl: {
+                    offset: 11,
+                    span: 14,
+                  },
+                  xxl: {
+                    offset: 11,
+                    span: 13,
+                  },
                 }}
               >
                 <Button type="primary" htmlType="submit" loading={loading}>
@@ -199,7 +226,7 @@ const page = () => {
             </div>
           </div>
 
-          <div className="mt-3">
+          <div className="mt-3 text-center">
             <p>
               Already have an account?{" "}
               <Link

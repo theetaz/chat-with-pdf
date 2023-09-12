@@ -25,6 +25,10 @@ export default function ChatLayout({ children }) {
   const [userId, setUserId] = useState(null);
   const [recentChats, setRecentChats] = useState(null);
   const [selectedKey, setSelectedKey] = useState(null);
+  const [localUserId, setLocalUserId] = useState(null);
+  const [unregUserdata, setUnregUserdata] = useState(null);
+
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASS_URL;
 
   const getUserId = () => {
     let userId = "";
@@ -34,6 +38,9 @@ export default function ChatLayout({ children }) {
       userId = decoded.userid;
       setUserId(userId);
     }
+    if (!session) {
+      setUserId(localUserId);
+    }
   };
 
   useEffect(() => {
@@ -41,42 +48,57 @@ export default function ChatLayout({ children }) {
   }, [session]);
 
   //push to sign in if session is null
+  // useEffect(() => {
+  //   if (!session) {
+  //     router.push("/sign-in");
+  //   }
+  // }, [session]);
+
   useEffect(() => {
-    if (!session) {
-      router.push("/sign-in");
+    let localUserId = "";
+
+    if (typeof window !== "undefined") {
+      // Check if the unique ID exists in local storage
+      if (localStorage.getItem("localUserId")) {
+        // If it exists, retrieve the unique ID
+        localUserId = localStorage.getItem("localUserId");
+        console.log("localUserId :", localUserId);
+        setLocalUserId(localUserId);
+      }
     }
   }, [session]);
 
-  // //get user id from local storage
-  // useEffect(() => {
-  //   let userId = "";
-  //   if (typeof window !== "undefined") {
-  //     // Check if the unique ID exists in local storage
-  //     if (localStorage.getItem("userId")) {
-  //       // If it exists, retrieve the unique ID
-  //       userId = localStorage.getItem("userId");
-  //       setUserId(userId);
-  //     }
-  //   }
-  // }, []);
+  useEffect(() => {
+    fetchRecentChats();
+  }, [userId, session]);
 
   //fetch recent chats from backend
   const fetchRecentChats = async () => {
-    try {
-      const response = await APIClient.get(
-        `/api/v1/chatdoc/recent_chat?userid=${userId}`
-      );
-      const data = response.data;
+    if (session) {
+      try {
+        const response = await APIClient.get(
+          `/api/v1/chatdoc/recent_chat?userid=${userId}`
+        );
+        const data = response.data;
 
-      setRecentChats(data.result.recent_chats);
-    } catch (error) {}
+        setRecentChats(data.result.recent_chats);
+      } catch (error) {
+        console.log("error :", error);
+      }
+    }
   };
 
-  useEffect(() => {
-    if (userId) {
-      fetchRecentChats();
-    }
-  }, [userId, selectedKey]);
+  // useEffect(() => {
+  //   if (session) {
+  //     if (userId) {
+  //       fetchRecentChats();
+  //     }
+  //   }
+
+  //   if (!session && unregUserdata && userId) {
+  //     fetchRecentChats();
+  //   }
+  // }, [userId, selectedKey, unregUserdata, session]);
 
   const {
     token: { colorBgContainer },
@@ -133,6 +155,37 @@ export default function ChatLayout({ children }) {
           items={items}
           selectedKeys={selectedKey}
         />
+        {!session && (
+          <>
+            <div
+              style={{
+                padding: "10px",
+                textAlign: "center",
+                fontSize: "16px",
+                color: "#e2e3e7",
+              }}
+            >
+              Register to save your chat history
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onClick={() => router.push("/register")}
+            >
+              <Button
+                style={{
+                  textDecoration: "none",
+                }}
+                href={"/register"}
+              >
+                Register
+              </Button>
+            </div>
+          </>
+        )}
         <div
           style={{
             marginTop: "auto",
