@@ -86,7 +86,9 @@ const NavBar = () => {
   };
 
   useEffect(() => {
-    getUserId();
+    if (session) {
+      getUserId();
+    }
   }, [session]);
 
   // Effect to add event listener when the menu is open

@@ -49,7 +49,9 @@ const HeroPage = () => {
   };
 
   useEffect(() => {
-    getUserId();
+    if (session) {
+      getUserId();
+    }
   }, [session]);
 
   const triggerChatHistoryReload = useSelector(
@@ -73,7 +75,7 @@ const HeroPage = () => {
         setLocalUserId(localUserId);
       }
     }
-  }, []);
+  });
 
   //unregister user logics
 
@@ -95,7 +97,7 @@ const HeroPage = () => {
     if (localUserId && !session) {
       unregisterUser();
     }
-  }, [localUserId]);
+  }, [localUserId, session]);
 
   //store user id with access token in local storage
 
