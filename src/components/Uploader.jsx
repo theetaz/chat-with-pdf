@@ -30,59 +30,74 @@ const Uploader = () => {
 
   const getUserId = () => {
     let userId = "";
-    if (session) {
-      const decoded = jwt.decode(session.accessToken);
-      console.log("decoded :", decoded.userid);
-      userId = decoded.userid;
-      setUserId(userId);
-    }
+
+    const decoded = jwt.decode(session.accessToken);
+    console.log("decoded :", decoded.userid);
+    userId = decoded.userid;
+    setUserId(userId);
   };
 
   useEffect(() => {
-    getUserId();
+    if (session) {
+      getUserId();
+    }
   }, [session]);
 
   //get user id from local storage
   useEffect(() => {
-    let localUserId = "";
+    if (!session) {
+      let localUserId = "";
 
-    if (typeof window !== "undefined") {
-      // Check if the unique ID exists in local storage
-      if (localStorage.getItem("localUserId")) {
-        // If it exists, retrieve the unique ID
-        localUserId = localStorage.getItem("localUserId");
-        console.log("localUserId :", localUserId);
-        setLocalUserId(localUserId);
+      if (typeof window !== "undefined") {
+        // Check if the unique ID exists in local storage
+        if (localStorage.getItem("localUserId")) {
+          // If it exists, retrieve the unique ID
+          localUserId = localStorage.getItem("localUserId");
+          console.log("localUserId :", localUserId);
+          setLocalUserId(localUserId);
+          setUserId(localUserId);
+        }
       }
     }
-  }, []);
+  });
+
+  //get access token from local storage
+
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     // Check if the unique ID exists in local storage
+  //     if (localStorage.getItem(`${localUserId}userToken`)) {
+  //       // If it exists, retrieve the unique ID
+  //       const unregUserdata = localStorage.getItem(`${localUserId}userToken`);
+  //       console.log(`Uploader page  ${localUserId}userToken`, unregUserdata);
+  //       setUnregUserdata(unregUserdata);
+  //     }
+  //   }
+  // }, [localUserId]);
 
   useEffect(() => {
-    if (!session) {
-      setUserId(localUserId);
-      console.log("uploader localUserId", localUserId);
-    }
-  }, [session, localUserId]);
+    if (localUserId) {
+      const checkLocalStorage = () => {
+        if (typeof window !== "undefined" && localUserId) {
+          const token = localStorage.getItem(`${localUserId}userToken`);
+          if (token) {
+            // Token found, stop the interval
+            console.log("token found");
+            clearInterval(intervalId);
+            setUnregUserdata(token);
+          }
+        }
+      };
 
-  //get unreg user data
-  const unregisterUser = async () => {
-    let data = new FormData();
-    data.append("userid", localUserId);
+      // Start the interval (check every 1000ms or 1 second)
+      const intervalId = setInterval(checkLocalStorage, 1000);
 
-    try {
-      const respond = axios.post(`${baseUrl}/api/v1/user/unregister`, data);
-      const result = await respond;
-      console.log("unreg result :", result?.data?.result);
-      setUnregUserdata(result?.data?.result);
-    } catch (error) {
-      console.log("unreg error :", error);
+      // Clean up the interval when the component unmounts
+      return () => {
+        clearInterval(intervalId);
+      };
     }
-  };
-
-  useEffect(() => {
-    if (localUserId && !session) {
-      unregisterUser();
-    }
+    // Function to check for the token in local storage
   }, [localUserId]);
 
   useEffect(() => {
@@ -90,12 +105,11 @@ const Uploader = () => {
       console.log("uploader session", session);
       setAccessToken(session.accessToken);
     }
-
-    if (!session && unregUserdata) {
-      console.log("uploader unregUserdata", unregUserdata);
-      setAccessToken(unregUserdata.access_token);
-    }
-  }, [session, unregUserdata]);
+    // if (!session && unregUserdata) {
+    //   console.log("local access token", unregUserdata);
+    //   setAccessToken(unregUserdata);
+    // }
+  }, [session]);
 
   const props = {
     name: "file",
@@ -103,7 +117,7 @@ const Uploader = () => {
     action: `${process.env.NEXT_PUBLIC_API_BASS_URL}/api/v1/chatdoc/`,
     headers: {
       ContentType: "application/pdf",
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${accessToken || unregUserdata}`,
     },
     accept: ".pdf, .xlsx , .csv, .pptx , .ppt , .docx , .doc",
     data: {
