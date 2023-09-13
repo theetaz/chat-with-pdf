@@ -132,16 +132,23 @@ const Uploader = () => {
         setLoading(false);
       }
       if (status === "done") {
-        message.success(`${info.file.name} file uploaded successfully.`);
+        if (info.file.response.code === "409") {
+          message.error(`${info.file.response.message}`);
+        }
+        if (info.file.response.code === "200") {
+          message.success(`${info.file.name} file uploaded successfully.`);
+        }
         setPdfName(info.file.name);
-        setPdfLink(info.file.response.result.source_url);
-        setSourceId(info.file.response.result.source_id);
+        setPdfLink(info.file.response.result?.source_url);
+        setSourceId(info.file.response.result?.source_id);
         setUploadedFile(info.file.response.result);
       } else if (status === "error") {
         message.error(`${info.file.name} file upload failed.`);
       }
     },
-    onDrop(e) {},
+    onDrop(e) {
+      console.log("Dropped files", e.dataTransfer.files);
+    },
   };
 
   //if pdf link is available, store it in local storage according to the source id
