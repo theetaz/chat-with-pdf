@@ -6,7 +6,7 @@ import DocsViewer from "@/components/DocsViewer";
 import OtherPdfView from "@/components/OtherPdfView";
 import PptViewer from "@/components/PptViewer";
 import { setUrlParam } from "@/feature/dataslice";
-import { use, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import APIClient from "@/lib/axiosInterceptor";
 import { useSession } from "next-auth/react";

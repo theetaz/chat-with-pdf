@@ -95,9 +95,17 @@ const ChatComp = ({ id }) => {
 
         const data = response.data;
 
+        console.log("data", data);
+
+        if (data?.code === "409") {
+          message.error(data?.message);
+          setLoading(false);
+          return;
+        }
+
         setMessages((messages) => [
           ...messages,
-          { msg: data.result.reply, sender: "ai" },
+          { msg: data.result?.reply, sender: "ai" },
         ]);
         setLoading(false);
       } catch (error) {
@@ -132,9 +140,14 @@ const ChatComp = ({ id }) => {
           .then((data) => {
             // Handle the response data
             console.log("unregister data from api :", data);
+            if (data?.code === "409") {
+              message.error(data?.message);
+              setLoading(false);
+              return;
+            }
             setMessages((messages) => [
               ...messages,
-              { msg: data.result.reply, sender: "ai" },
+              { msg: data.result?.reply, sender: "ai" },
             ]);
             setLoading(false);
           });
