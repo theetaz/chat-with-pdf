@@ -1,7 +1,7 @@
 "use client";
 
 import { signIn, useSession } from "next-auth/react";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, message } from "antd";
 import {
   GoogleCircleFilled,
   FacebookFilled,
@@ -18,6 +18,7 @@ const page = () => {
   const router = useRouter();
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+
   const onFinish = async (values) => {
     console.log("Success:", values);
     setLoading(true);
@@ -27,6 +28,7 @@ const page = () => {
       redirect: false,
       callbackUrl: "/",
     });
+    console.log("result from cred :", result);
     setResult(result);
     setLoading(false);
   };
@@ -37,8 +39,12 @@ const page = () => {
   useEffect(() => {
     if (result) {
       console.log("result", result);
-      if (result.status === 200) {
+      if (result.status === 200 && result.error === null) {
         router.push("/");
+      }
+      if (result.error === "CredentialsSignin") {
+        console.log("Invalid email or password");
+        message.error("Invalid email or password");
       }
     }
   }, [result]);
