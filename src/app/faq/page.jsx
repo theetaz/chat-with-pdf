@@ -53,7 +53,7 @@ export default function Faq() {
       ),
     },
     {
-      key: "3",
+      key: "4",
       label: "Am I charged for every request?",
       children: (
         <p>
@@ -66,7 +66,7 @@ export default function Faq() {
       ),
     },
     {
-      key: "3",
+      key: "5",
       label: "What is the billing interval?",
       children: (
         <p>
@@ -76,7 +76,7 @@ export default function Faq() {
       ),
     },
     {
-      key: "3",
+      key: "6",
       label: "At which point in time can I cancel my subscription?",
       children: (
         <p>

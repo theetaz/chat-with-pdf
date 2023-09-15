@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Dropdown } from "antd";
+import { Button, Dropdown, message } from "antd";
 import Link from "next/link";
 import { MenuOutlined, CloseSquareOutlined } from "@ant-design/icons";
 import { useState, useEffect, useRef } from "react";
@@ -8,8 +8,11 @@ import { useSession, signOut } from "next-auth/react";
 import { Modal, Input } from "antd";
 import APIClient from "@/lib/axiosInterceptor";
 import jwt from "jsonwebtoken";
+import axios from "axios";
+import FormData from "form-data";
 
 const NavBar = () => {
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASS_URL;
   const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,11 +20,117 @@ const NavBar = () => {
   const [userProfileInfo, setUserProfileInfo] = useState(null);
 
   const [fetchProfileInfoLoading, setFetchProfileInfoLoading] = useState(false);
+  const [passwordResetInfo, setPasswordResetInfo] = useState(null);
+  const [isPasswordResetReq, setIsPasswordResetReq] = useState("0");
+  const [OtpSendingInfo, setOtpSendingInfo] = useState(null);
+  const [newPasswordInfo, setNewPasswordInfo] = useState(null);
+
+  const [newPassword, setNewPassword] = useState(null);
+  const [otpSendNewPassWordLoading, setOtpSendNewPassWordLoading] =
+    useState(false);
+
+  const [resetPasswordReqLoading, setResetPasswordReqLoading] = useState(false);
+  const [otpSendLoading, setOtpSendLoading] = useState(false);
+  const [OTP, setOTP] = useState(null);
 
   const menuRef = useRef(null);
 
+  useEffect(() => {
+    if (userProfileInfo) {
+      console.log(userProfileInfo);
+      let data = new FormData();
+      data.append("email", userProfileInfo?.email);
+      setPasswordResetInfo(data);
+      console.log(data);
+    }
+  }, [userProfileInfo]);
+
   //reset password func
-  const handleReset = () => {};
+  const handleReset = async () => {
+    if (passwordResetInfo) {
+      setResetPasswordReqLoading(true);
+      try {
+        const response = await axios.post(
+          `${baseUrl}/api/v1/user/otp/request`,
+          passwordResetInfo
+        );
+        const result = response.data;
+        message.success(result.message);
+        console.log(result);
+        setIsPasswordResetReq("1");
+        setResetPasswordReqLoading(false);
+      } catch (error) {
+        console.log(error);
+        message.error(error);
+        setIsPasswordResetReq("0");
+        setResetPasswordReqLoading(false);
+      }
+    }
+  };
+
+  //OTP send func
+
+  useEffect(() => {
+    if (OTP && userProfileInfo) {
+      let data = new FormData();
+      data.append("email", userProfileInfo?.email);
+      data.append("otp", OTP);
+      setOtpSendingInfo(data);
+    }
+  }, [OTP, userProfileInfo]);
+
+  const handleOTPsend = async () => {
+    setOtpSendLoading(true);
+    try {
+      const response = await axios.post(
+        `${baseUrl}/api/v1/user/otp/verify`,
+        OtpSendingInfo
+      );
+
+      const result = response.data;
+      message.success(result.message);
+      console.log(result);
+      setIsPasswordResetReq("2");
+      setOtpSendLoading(false);
+    } catch (error) {
+      console.log(error);
+      message.error(error);
+      setIsPasswordResetReq("1");
+      setOtpSendLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (newPassword && userProfileInfo) {
+      let data = new FormData();
+      data.append("email", userProfileInfo?.email);
+      data.append("new_password", newPassword);
+      setNewPasswordInfo(data);
+    }
+  }, [newPassword, userProfileInfo]);
+
+  // send new password
+
+  const handleNewPasswordsend = async () => {
+    setOtpSendNewPassWordLoading(true);
+    try {
+      const response = await axios.post(
+        `${baseUrl}/api/v1/user/password/reset`,
+        newPasswordInfo
+      );
+
+      const result = response.data;
+      message.success(result.message);
+      console.log(result);
+      setIsPasswordResetReq("0");
+      setOtpSendNewPassWordLoading(false);
+    } catch (error) {
+      console.log(error);
+      message.error(error);
+      setIsPasswordResetReq("2");
+      setOtpSendNewPassWordLoading(false);
+    }
+  };
 
   //modal func
 
@@ -446,15 +555,76 @@ const NavBar = () => {
           <div>{userProfileInfo?.email}</div>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            margin: "10px",
-          }}
-        >
-          <Button onClick={handleReset}>Reset Password</Button>
-        </div>
+        {isPasswordResetReq === "0" ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              margin: "10px",
+            }}
+          >
+            <Button loading={resetPasswordReqLoading} onClick={handleReset}>
+              Reset Password
+            </Button>
+          </div>
+        ) : isPasswordResetReq === "1" ? (
+          <>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                margin: "10px",
+              }}
+            >
+              <Input
+                name="otpSend"
+                value={OTP}
+                onChange={(e) => setOTP(e.target.value)}
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Button onClick={handleOTPsend} loading={otpSendLoading}>
+                Enter OTP
+              </Button>
+            </div>
+          </>
+        ) : isPasswordResetReq === "2" ? (
+          <>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                margin: "10px",
+              }}
+            >
+              <Input
+                name="otpSend"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Button
+                onClick={handleNewPasswordsend}
+                loading={otpSendNewPassWordLoading}
+              >
+                Set New Password
+              </Button>
+            </div>
+          </>
+        ) : null}
       </Modal>
     </>
   );
