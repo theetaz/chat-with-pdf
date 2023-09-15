@@ -11,11 +11,7 @@ export default function Pricing() {
         justifyContent: "center",
       }}
     >
-      <div
-        style={{
-          marginBottom: "2rem",
-        }}
-      >
+      <div className="pricing-page-title">
         <h3>Upgrade to SmartAIDoc plus</h3>
       </div>
 
@@ -26,11 +22,12 @@ export default function Pricing() {
           }}
         >
           <Row gutter={50} justify={"center"}>
-            <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
+            <Col xxl={12} xl={12} lg={12} md={12} sm={12} xs={24}>
               <div
                 style={{
                   height: "100%",
                 }}
+                className="pricing-page-pricing-card"
               >
                 <PricingCard
                   title={"Free"}
@@ -45,11 +42,20 @@ export default function Pricing() {
               </div>
             </Col>
 
-            <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
+            <Col
+              xxl={12}
+              xl={12}
+              lg={12}
+              md={12}
+              sm={12}
+              xs={24}
+              className="pricing-page-pricing-card-col"
+            >
               <div
                 style={{
                   minHeight: "100%",
                 }}
+                className="pricing-page-pricing-card"
               >
                 <PricingCard
                   title={"plus"}

@@ -3,22 +3,24 @@ import NavBar from "@/components/NavBar";
 
 export default function PricingLayout({ children }) {
   return (
-    <div style={{
+    <div
+      style={{
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
-    }}>
+      }}
+    >
       <div
         style={{
           width: "100%",
         }}
       >
-        <NavBar/>
+        <NavBar />
       </div>
       {children}
-      <div className="mb-2">
+      <div className="mb-2 mt-4">
         <Footer />
       </div>
     </div>
