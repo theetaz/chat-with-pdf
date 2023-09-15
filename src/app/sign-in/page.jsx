@@ -69,15 +69,16 @@ const page = () => {
       <div style={{ width: "100%" }}>
         <NavBar />
       </div>
-      <div className="container d-flex justify-content-center align-items-center flex-column ">
+      <div className="container d-flex justify-content-center align-items-center flex-column  ">
         <div
           style={{
             backgroundColor: "#f6f4eb",
           }}
-          className="d-flex justify-content-center align-items-center flex-column border border-black p-5 rounded sign-in-container"
+          className="d-flex justify-content-center align-items-center flex-column border border-black p-5  rounded sign-in-container"
         >
           <div>
             <Form
+              layout="vertical"
               name="sign-in"
               labelCol={{
                 sm: 6,
@@ -87,11 +88,11 @@ const page = () => {
                 xxl: 6,
               }}
               wrapperCol={{
-                sm: 18,
-                xs: 20,
-                md: 18,
-                xl: 20,
-                xxl: 18,
+                sm: 24,
+                xs: 24,
+                md: 24,
+                xl: 24,
+                xxl: 24,
               }}
               // style={{
               //   width: 300,
@@ -143,8 +144,8 @@ const page = () => {
                     span: 18,
                   },
                   lg: {
-                    offset: 6,
-                    span: 18,
+                    offset: 11,
+                    span: 24,
                   },
                   xl: {
                     offset: 11,
@@ -170,8 +171,8 @@ const page = () => {
                     span: 18,
                   },
                   lg: {
-                    offset: 6,
-                    span: 18,
+                    offset: 11,
+                    span: 24,
                   },
                   xl: {
                     offset: 11,
