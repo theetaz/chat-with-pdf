@@ -369,10 +369,7 @@ const NavBar = () => {
               </Link>
               {session?.accessToken && (
                 <>
-                  <Button
-                    onClick={showModal}
-                    className="text-decoration-none text-white mt-2 transparent-button"
-                  >
+                  <Button onClick={showModal} className=" mt-2 ">
                     Profile
                   </Button>
                   <Link
