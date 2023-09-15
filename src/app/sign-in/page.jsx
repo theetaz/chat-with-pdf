@@ -78,7 +78,7 @@ const page = () => {
         >
           <div>
             <Form
-              name="basic"
+              name="sign-in"
               labelCol={{
                 sm: 6,
                 xs: 4,
