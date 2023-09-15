@@ -79,8 +79,8 @@ const NavBar = () => {
     let userId = "";
     if (session) {
       const decoded = jwt.decode(session.accessToken);
-      console.log("decoded :", decoded.userid);
-      userId = decoded.userid;
+      console.log("decoded :", decoded?.userid);
+      userId = decoded?.userid;
       setUserId(userId);
     }
   };
