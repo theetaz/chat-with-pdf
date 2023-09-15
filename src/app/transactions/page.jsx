@@ -142,20 +142,22 @@ export default function Transactions() {
 
   return (
     <>
-      <div
-        className="container p-4 mt-5"
-        style={{
-          border: "1px solid #000",
-          borderRadius: "10px",
-          background: "#fff",
-          maxWidth: "1020px",
-        }}
-      >
+      <div className="p-3">
         <div
+          className="container p-4 mt-5 subscription-container"
+          style={{
+            border: "1px solid #000",
+            borderRadius: "10px",
+            background: "#fff",
+            maxWidth: "1020px",
+          }}
+        >
+          {/* <div
           style={{
             display: "flex",
             justifyContent: "space-between",
           }}
+          className="transactions-header"
         >
           <div>
             <h4>Subscription</h4>
@@ -173,65 +175,143 @@ export default function Transactions() {
               <Button onClick={manageSub}>Manage Subscription</Button>
             </div>
           )}
+        </div> */}
+          <div>
+            <Row>
+              <Col
+                lg={12}
+                sm={12}
+                xs={24}
+                md={12}
+                xxl={12}
+                className="trans-title"
+              >
+                <div className="trans-title-para">
+                  <h4>Subscription</h4>
+                  <p
+                    style={{
+                      fontWeight: "bold",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    {userProfileInfo?.subscription_tier}
+                  </p>
+                </div>
+              </Col>
+              <Col
+                lg={12}
+                sm={12}
+                xs={24}
+                md={12}
+                xxl={12}
+                className="trans-manage-button"
+              >
+                <div className="trans-manage-button-hide">
+                  {userProfileInfo?.subscription_tier === "plus" && (
+                    <div>
+                      <Button onClick={manageSub}>Manage Subscription</Button>
+                    </div>
+                  )}
+                </div>
+              </Col>
+            </Row>
+          </div>
+          {userUsageLoading ? (
+            <Loader />
+          ) : (
+            <>
+              <Row>
+                <Col xxl={8} lg={8} md={8} sm={8} xs={12}>
+                  <p
+                    style={{
+                      color: "#828391",
+                    }}
+                  >
+                    Subscribed to
+                  </p>
+                </Col>
+                <Col
+                  xxl={8}
+                  lg={8}
+                  md={8}
+                  sm={8}
+                  xs={12}
+                  className="user-data-col"
+                >
+                  {userProfileInfo?.subscription_tier}
+                </Col>
+              </Row>
+              <Row>
+                <Col xxl={8} lg={8} md={8} sm={8} xs={12}>
+                  <p
+                    style={{
+                      color: "#828391",
+                    }}
+                  >
+                    Documents used
+                  </p>
+                </Col>
+                <Col
+                  xxl={8}
+                  lg={8}
+                  md={8}
+                  sm={8}
+                  xs={12}
+                  className="user-data-col"
+                >{`${userUsage?.used_documents} / ${userUsage?.total_documents} `}</Col>
+              </Row>
+              <Row>
+                <Col xxl={8} lg={8} md={8} sm={8} xs={12}>
+                  <p
+                    style={{
+                      color: "#828391",
+                    }}
+                  >
+                    Questions used
+                  </p>
+                </Col>
+                <Col
+                  xxl={8}
+                  lg={8}
+                  md={8}
+                  sm={8}
+                  xs={12}
+                  className="user-data-col"
+                >{`${userUsage?.used_questions} / ${userUsage?.total_question} `}</Col>
+              </Row>
+              <Row>
+                <Col xxl={8} lg={8} md={8} sm={8} xs={12}>
+                  <p
+                    style={{
+                      color: "#828391",
+                    }}
+                  >
+                    Next reset in
+                  </p>
+                </Col>
+                <Col
+                  xxl={8}
+                  lg={8}
+                  md={8}
+                  sm={8}
+                  xs={12}
+                  className="user-data-col"
+                >
+                  {calculateRemainDates(userUsage?.end_on)}
+                </Col>
+              </Row>
+              <div>
+                <div className="trans-manage-button-unhide">
+                  {userProfileInfo?.subscription_tier === "plus" && (
+                    <div>
+                      <Button onClick={manageSub}>Manage Subscription</Button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
         </div>
-        {userUsageLoading ? (
-          <Loader />
-        ) : (
-          <>
-            <Row>
-              <Col span={8}>
-                <p
-                  style={{
-                    color: "#828391",
-                  }}
-                >
-                  Subscribed to
-                </p>
-              </Col>
-              <Col span={8}>{userProfileInfo?.subscription_tier}</Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <p
-                  style={{
-                    color: "#828391",
-                  }}
-                >
-                  Documents used
-                </p>
-              </Col>
-              <Col
-                span={8}
-              >{`${userUsage?.used_documents} / ${userUsage?.total_documents} `}</Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <p
-                  style={{
-                    color: "#828391",
-                  }}
-                >
-                  Questions used
-                </p>
-              </Col>
-              <Col
-                span={8}
-              >{`${userUsage?.used_questions} / ${userUsage?.total_question} `}</Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <p
-                  style={{
-                    color: "#828391",
-                  }}
-                >
-                  Next reset in
-                </p>
-              </Col>
-              <Col span={8}>{calculateRemainDates(userUsage?.end_on)}</Col>
-            </Row>
-          </>
-        )}
       </div>
 
       <div
@@ -241,7 +321,7 @@ export default function Transactions() {
         }}
       >
         <div>
-          <h3>Upgrade to SmartAIDoc plus</h3>
+          <h3 className="upgrade-title">Upgrade to SmartAIDoc plus</h3>
 
           <div
             style={{
@@ -271,7 +351,15 @@ export default function Transactions() {
                 </div>
               </Col>
 
-              <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
+              <Col
+                xxl={12}
+                xl={12}
+                lg={12}
+                md={12}
+                sm={24}
+                xs={24}
+                className="trans-pricing-card"
+              >
                 <div
                   style={{
                     minHeight: "100%",
