@@ -200,9 +200,9 @@ const page = () => {
 
             <div
               style={{
-                cursor: "pointer",
+                cursor: "not-allowed",
               }}
-              onClick={() => signIn("facebook")}
+              // onClick={() => signIn("facebook")}
             >
               <FacebookFilled
                 style={{
@@ -213,9 +213,9 @@ const page = () => {
             </div>
             <div
               style={{
-                cursor: "pointer",
+                cursor: "not-allowed",
               }}
-              onClick={() => signIn("github")}
+              // onClick={() => signIn("github")}
             >
               <GithubFilled
                 style={{
