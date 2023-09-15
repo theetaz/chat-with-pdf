@@ -55,6 +55,7 @@ const Footer = () => {
           style={{
             color: "#8496aa",
             fontSize: "12px",
+            textAlign: "center",
           }}
         >
           Copyright SmartAIDocs 2023, All Rights Reserved. Powered by{" "}

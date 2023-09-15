@@ -30,41 +30,6 @@ body {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f3e7e9",endColorstr="#fbfcdb",GradientType=1);
 }
 
-@media screen and (min-width: 1200px) {
-  .buttonCol {
-    padding: 0 5rem;
-  }
-  .uploader-container {
-    padding: 0 50px;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .pdf-view-col {
-    display: none;
-  }
-
-  .headerButton {
-    width: 70% !important;
-  }
-
-  .sign-in-form,
-  .register-form {
-    width: 300px !important;
-  }
-  .sign-in-container,
-  .register-container {
-    width: 350px !important;
-  }
-}
-
-@media screen and (min-width: 600px) {
-  .sign-in-form,
-  .register-form {
-    width: 800px !important;
-  }
-}
-
 .uploader .ant-upload-drag {
   border: 1px dashed #bccadf;
 }
@@ -170,4 +135,91 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* responsive */
+
+@media screen and (min-width: 1200px) {
+  .buttonCol {
+    padding: 0 5rem;
+  }
+  .uploader-container {
+    padding: 0 50px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .pdf-view-col {
+    display: none;
+  }
+
+  .headerButton {
+    width: 70% !important;
+  }
+
+  .sign-in-form,
+  .register-form {
+    width: 300px !important;
+  }
+  .sign-in-container,
+  .register-container {
+    width: 350px !important;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .sign-in-form,
+  .register-form {
+    width: 800px !important;
+  }
+}
+
+@media screen and (min-width: 576px) {
+  .trans-manage-button {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .trans-manage-button-hide {
+    display: flex;
+  }
+  .trans-manage-button-unhide {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .trans-pricing-card {
+    margin-top: 20px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .trans-manage-button {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .trans-title-para {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .user-data-col {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .trans-manage-button-hide {
+    display: none;
+  }
+
+  .trans-manage-button-unhide {
+    display: flex;
+    justify-content: center;
+  }
+  .upgrade-title {
+    text-align: center;
+  }
 }
