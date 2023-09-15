@@ -79,7 +79,7 @@ const page = () => {
         >
           <div>
             <Form
-              name="basic"
+              name="register"
               labelCol={{
                 sm: 6,
                 xs: 4,
