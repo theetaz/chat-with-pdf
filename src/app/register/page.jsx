@@ -82,11 +82,7 @@ const page = () => {
               layout="vertical"
               name="register"
               labelCol={{
-                sm: 6,
-                xs: 4,
-                md: 6,
-                xl: 4,
-                xxl: 6,
+                span: 24,
               }}
               wrapperCol={{
                 sm: 24,
