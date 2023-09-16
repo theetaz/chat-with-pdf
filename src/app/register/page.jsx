@@ -79,6 +79,7 @@ const page = () => {
         >
           <div>
             <Form
+              layout="vertical"
               name="register"
               labelCol={{
                 sm: 6,
@@ -88,11 +89,11 @@ const page = () => {
                 xxl: 6,
               }}
               wrapperCol={{
-                sm: 18,
-                xs: 20,
-                md: 18,
-                xl: 20,
-                xxl: 18,
+                sm: 24,
+                xs: 24,
+                md: 24,
+                xl: 24,
+                xxl: 24,
               }}
               // style={{
               //   width: 800,
