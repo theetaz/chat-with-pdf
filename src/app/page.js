@@ -5,6 +5,7 @@ export const metadata = {
   title: "Smart AI Doc",
   description:
     "Your smart AI document reader & analyzer - similar to ChatGPT but for PDFs, CSVs, Excel, and PowerPoint documents. Summarize and respond to questions intelligently",
+  metadataBase: new URL("https://smartaidoc.com"),
 };
 
 export default function Home() {
