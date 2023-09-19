@@ -158,7 +158,8 @@ body {
   }
 
   .sign-in-form,
-  .register-form {
+  .register-form,
+  .contact-form {
     width: 300px !important;
   }
   .sign-in-container,
@@ -169,7 +170,8 @@ body {
 
 @media screen and (min-width: 600px) {
   .sign-in-form,
-  .register-form {
+  .register-form,
+  .contact-form {
     width: 800px !important;
   }
 }
