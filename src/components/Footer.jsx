@@ -5,9 +5,9 @@ const Footer = () => {
   return (
     <>
       <div className="d-flex flex-column align-items-center justify-content-center">
-        <div className="mb-2">
+        <div className="mb-2 d-flex justify-content-center flex-wrap">
           <Link
-            href="/"
+            href="/contact"
             style={{
               marginRight: "35px",
               textDecoration: "none",
@@ -15,7 +15,7 @@ const Footer = () => {
               fontSize: "14px",
             }}
           >
-            About
+            Contact
           </Link>
           <Link
             href="/"
@@ -40,7 +40,7 @@ const Footer = () => {
             FAQ
           </Link>
           <Link
-            href="/"
+            href="/privacy-policy"
             style={{
               marginRight: "25px",
               textDecoration: "none",
@@ -48,7 +48,18 @@ const Footer = () => {
               fontSize: "14px",
             }}
           >
-            Twitter
+            Privacy Policy
+          </Link>
+          <Link
+            href="/privacy-policy"
+            style={{
+              marginRight: "25px",
+              textDecoration: "none",
+              color: "#8496aa",
+              fontSize: "14px",
+            }}
+          >
+            Terms & Conditions
           </Link>
         </div>
         <div

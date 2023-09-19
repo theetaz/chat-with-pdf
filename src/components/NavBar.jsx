@@ -302,8 +302,11 @@ const NavBar = () => {
           <Link href="/faq" className="text-decoration-none text-black me-5">
             FAQ
           </Link>
-          <Link href="/" className="text-decoration-none text-black me-5">
-            About
+          <Link
+            href="/contact"
+            className="text-decoration-none text-black me-5"
+          >
+            Contact
           </Link>
         </div>
         <div className="d-flex align-items-center position-relative">
@@ -428,16 +431,19 @@ const NavBar = () => {
           ref={menuRef}
         >
           <div>
-            <span
-              style={{
-                fontSize: "22px",
-                fontWeight: "700",
-                lineHeight: "20px",
-                fontStyle: "italic",
-              }}
-            >
-              SmarAIDoc
-            </span>
+            <Link href={"/"} className="text-decoration-none text-black">
+              <span
+                style={{
+                  fontSize: "22px",
+                  fontWeight: "700",
+                  lineHeight: "20px",
+                  fontStyle: "italic",
+                }}
+              >
+                SmarAIDoc
+              </span>
+            </Link>
+
             {/* <span
               style={{
                 fontSize: "22px",
@@ -476,6 +482,13 @@ const NavBar = () => {
               >
                 FAQ
               </Link>
+              <Link
+                href="/contact"
+                className="text-decoration-none text-white mt-2"
+              >
+                Contact
+              </Link>
+
               {session?.accessToken && (
                 <>
                   <Button onClick={showModal} className=" mt-2 ">
