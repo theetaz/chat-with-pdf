@@ -40,10 +40,18 @@ const Contact = () => {
       });
       const data = await response.json();
       console.log(data);
-      message.success(data.message);
+
+      if (data.status === "success") {
+        message.success(data.message);
+      } else if (data.status === "failed") {
+        message.error(data.message);
+      }
+
+      
       setFormButtonLoading(false);
     } catch (error) {
       console.log(error);
+
       setFormButtonLoading(false);
     }
   };

@@ -13,14 +13,28 @@ export async function POST(request) {
     subject: "Smart AI Doc Contact Form",
     text: `Name: ${data.name} \nEmail: ${data.email} \nMessage: ${data.message}`,
   };
-  sgMail
-    .send(msg)
-    .then(() => {
-      console.log("Email sent");
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  // sgMail
+  //   .send(msg)
+  //   .then(() => {
+  //     console.log("Email sent");
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //   });
 
-  return NextResponse.json({ message: "Email sent" });
+  try {
+    await sgMail.send(msg);
+    console.log("Email sent");
+    return NextResponse.json({
+      message: "Email sent success",
+      status: "success",
+    });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({
+      message: "Email sent failed",
+      error: error,
+      status: "failed",
+    });
+  }
 }
