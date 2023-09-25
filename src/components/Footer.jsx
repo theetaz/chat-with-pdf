@@ -40,7 +40,7 @@ const Footer = () => {
             FAQ
           </Link>
           <Link
-            href="/privacy-policy"
+            href="/"
             style={{
               marginRight: "25px",
               textDecoration: "none",
@@ -51,7 +51,7 @@ const Footer = () => {
             Privacy Policy
           </Link>
           <Link
-            href="/privacy-policy"
+            href="/"
             style={{
               marginRight: "25px",
               textDecoration: "none",
