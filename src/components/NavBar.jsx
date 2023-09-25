@@ -10,6 +10,7 @@ import APIClient from "@/lib/axiosInterceptor";
 import jwt from "jsonwebtoken";
 import axios from "axios";
 import FormData from "form-data";
+import Image from "next/image";
 
 const NavBar = () => {
   const baseUrl = process.env.NEXT_PUBLIC_API_BASS_URL;
@@ -262,13 +263,25 @@ const NavBar = () => {
         className="d-none d-md-flex"
       >
         <div>
-          <Link href="/" className="text-decoration-none text-black">
+          <Link href="/" className="text-decoration-none text-black d-flex">
+            <div>
+              <Image
+                src={"/logo.svg"}
+                width={30}
+                height={30}
+                alt="desktop logo"
+              />
+            </div>
             <span
               style={{
                 fontSize: "22px",
                 fontWeight: "700",
-                lineHeight: "20px",
                 fontStyle: "italic",
+                fontFamily: "Courier Prime",
+                display: "flex",
+                alignItems: "center",
+                flexWrap: "wrap",
+                marginLeft: "5px",
               }}
             >
               SmartAIDoc
@@ -431,16 +444,28 @@ const NavBar = () => {
           ref={menuRef}
         >
           <div>
-            <Link href={"/"} className="text-decoration-none text-black">
+            <Link href={"/"} className="text-decoration-none text-black d-flex">
+              <div>
+                <Image
+                  src={"/logo.svg"}
+                  width={30}
+                  height={30}
+                  alt="desktop logo"
+                />
+              </div>
               <span
                 style={{
                   fontSize: "22px",
                   fontWeight: "700",
-                  lineHeight: "20px",
                   fontStyle: "italic",
+                  fontFamily: "Courier Prime",
+                  display: "flex",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  marginLeft: "5px",
                 }}
               >
-                SmarAIDoc
+                SmartAIDoc
               </span>
             </Link>
 
